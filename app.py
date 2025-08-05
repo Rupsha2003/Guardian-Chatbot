@@ -180,7 +180,7 @@ def about_creator_page():
     st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
     
     # Updated image path - assuming passportsize.png is in the root of your GitHub repo
-    image_path = "D:\Chatbot\NEWPHOTO.jpg" 
+    image_path = r'D:\Chatbot\NEWPHOTO.jpg'
     
     st.markdown(f"""
         <div class='glass-box about-creator-content'>
