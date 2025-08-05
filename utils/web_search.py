@@ -3,31 +3,29 @@
 import requests
 import json
 import os
-# Import the config.api_keys module
-import config.api_keys # Changed import
+# Removed: from config.api_keys import get_serper_api_key
 
-def perform_web_search(query, num_results=3):
+def perform_web_search(query, serper_api_key, num_results=3): # Added serper_api_key argument
     """
     Performs a real-time web search using the Serper API.
 
     Args:
         query (str): The search query.
+        serper_api_key (str): The Serper API key.
         num_results (int): The number of search results to return.
 
     Returns:
         str: A formatted string containing the titles, snippets, and links of the top search results.
              Returns an empty string if the search fails.
     """
-    # Access the function via the imported module
-    SERPER_API_KEY = config.api_keys.get_serper_api_key()
-    if not SERPER_API_KEY:
-        print("Error: SERPER_API_KEY is not set. Please check your .streamlit/secrets.toml or Streamlit Cloud secrets.")
+    if not serper_api_key: # Use the passed argument
+        print("Error: SERPER_API_KEY is not provided.")
         return "Search functionality is not configured."
     
     url = "https://google.serper.dev/search"
     payload = json.dumps({"q": query})
     headers = {
-        'X-API-KEY': SERPER_API_KEY,
+        'X-API-KEY': serper_api_key, # Use the passed argument
         'Content-Type': 'application/json'
     }
 

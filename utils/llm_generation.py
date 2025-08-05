@@ -1,19 +1,16 @@
 # File: utils/llm_generation.py
 
 import google.generativeai as genai
-# Import the config.api_keys module
-import config.api_keys # Changed import
+# Removed: from config.api_keys import get_gemini_api_key
 
-def initialize_llm():
+def initialize_llm(gemini_api_key): # Added gemini_api_key argument
     """Initializes and returns the Google Gemini Pro model."""
     try:
-        # Access the function via the imported module
-        GEMINI_API_KEY = config.api_keys.get_gemini_api_key()
-        if not GEMINI_API_KEY:
-            print("Error: GEMINI_API_KEY is not set. Please check your .streamlit/secrets.toml or Streamlit Cloud secrets.")
+        if not gemini_api_key: # Use the passed argument
+            print("Error: GEMINI_API_KEY is not provided.")
             return None
             
-        genai.configure(api_key=GEMINI_API_KEY)
+        genai.configure(api_key=gemini_api_key) # Use the passed argument
         model = genai.GenerativeModel('gemini-1.5-flash') # Using gemini-1.5-flash as discussed
         print("Google Gemini-1.5-flash model initialized successfully.")
         return model
@@ -62,3 +59,4 @@ def generate_answer_from_context(model, query, context, response_mode="Concise")
     except Exception as e:
         print(f"Error generating content: {e}")
         return f"I encountered an error while trying to generate a response: {e}"
+

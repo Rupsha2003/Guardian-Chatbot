@@ -19,12 +19,14 @@ from utils.rag_utils import load_and_chunk_document, create_vector_store, retrie
 from utils.web_search import perform_web_search
 from utils.llm_generation import initialize_llm, generate_answer_from_context
 
+# Import api_keys directly here, as app.py is at the root
+import config.api_keys # New: Import the config module directly
+
 # --- Setup the Streamlit UI and "Liquid Glass" CSS ---
 st.set_page_config(layout="wide", page_title="Guardian Chatbot")
 
 # Inject custom CSS for the "liquid glass" effect
 def load_css(file_name):
-    # Ensure CSS file path is correct relative to app.py
     css_path = os.path.join(current_dir, file_name)
     if os.path.exists(css_path):
         with open(css_path) as f:
@@ -50,12 +52,15 @@ if "faiss_index" not in st.session_state:
         st.write("Initializing backend components. This may take a moment...")
         embeddings_model = GuardianEmbeddings()
 
-        llm_model = initialize_llm()
+        # Get API keys using the functions from config.api_keys
+        serper_key = config.api_keys.get_serper_api_key()
+        gemini_key = config.api_keys.get_gemini_api_key()
+
+        llm_model = initialize_llm(gemini_key) # Pass Gemini key
         if not llm_model:
             st.error("Failed to initialize the LLM model. Please check your API key and try again.")
             st.stop()
         
-        # Ensure this path is correct relative to the project root
         knowledge_base_path = os.path.join(current_dir, "transactions_knowledge_base.txt")
         if not os.path.exists(knowledge_base_path):
             st.error(f"Error: The knowledge base file '{knowledge_base_path}' was not found.")
@@ -64,9 +69,10 @@ if "faiss_index" not in st.session_state:
         document_chunks = load_and_chunk_document(knowledge_base_path)
         faiss_index, _ = create_vector_store(document_chunks, embeddings_model)
 
-        return embeddings_model, llm_model, faiss_index, document_chunks
+        # Return serper_key as well, so it can be used later
+        return embeddings_model, llm_model, faiss_index, document_chunks, serper_key
 
-    st.session_state.embeddings_model, st.session_state.llm_model, st.session_state.faiss_index, st.session_state.document_chunks = setup_backend()
+    st.session_state.embeddings_model, st.session_state.llm_model, st.session_state.faiss_index, st.session_state.document_chunks, st.session_state.serper_api_key = setup_backend()
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -109,7 +115,8 @@ if prompt := st.chat_input("Ask a question about fraud, security, or anything el
             
             if is_search_query and not any(kw in prompt.lower() for kw in ["fraud", "security", "transaction", "phishing", "identity theft", "account takeover", "bnpl"]):
                 st.info("Performing a live web search as requested.")
-                web_results = perform_web_search(prompt)
+                # Pass serper_api_key to perform_web_search
+                web_results = perform_web_search(prompt, st.session_state.serper_api_key)
                 if web_results:
                     final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
                 else:
@@ -124,7 +131,8 @@ if prompt := st.chat_input("Ask a question about fraud, security, or anything el
                 else:
                     st.warning("No relevant information found in the local knowledge base or context was too short.")
                     st.info("Performing a web search as a fallback...")
-                    web_results = perform_web_search(prompt)
+                    # Pass serper_api_key to perform_web_search
+                    web_results = perform_web_search(prompt, st.session_state.serper_api_key)
                     if web_results:
                         final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
                     else:
