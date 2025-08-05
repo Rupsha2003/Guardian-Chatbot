@@ -185,8 +185,8 @@ def chat_page():
 def about_creator_page():
     st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
     
-    # Updated image path to NEWPHOTO.jpg
-    image_path = "NEWPHOTO.jpg" 
+    # Use the raw GitHub content URL for the image
+    image_path = "https://raw.githubusercontent.com/Rupsha2003/Guardian-Chatbot/main/NEWPHOTO.jpg"
     
     st.markdown(f"""
         <div class='glass-box about-creator-content'>
