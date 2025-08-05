@@ -82,18 +82,24 @@ def navigate_to(page_name):
 # --- Home Page Function ---
 def home_page():
     st.markdown("<h1 class='liquid-title home-title'>Guardian AI</h1>", unsafe_allow_html=True)
-    st.markdown("<center><p class='glass-box description-box home-welcome'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p></center>", unsafe_allow_html=True)
-    st.markdown("<center><p class='glass-box home-tagline'>Empowering you with knowledge to protect your financial well-being.</p></center>", unsafe_allow_html=True)
+    
+    st.markdown("""
+        <div class='glass-box home-welcome-container'>
+            <p class='home-welcome-text'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p>
+            <p class='home-tagline'>Empowering you with knowledge to protect your financial well-being.</p>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
     
-    # Start Chatting Button
-    if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
-        navigate_to("chat")
-    
-    # About the Creator Button
-    if st.button("About the Creator", key="about_creator_button"):
-        navigate_to("about_creator")
+    # Use columns for side-by-side buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
+            navigate_to("chat")
+    with col2:
+        if st.button("About the Creator", key="about_creator_button"):
+            navigate_to("about_creator")
         
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -179,8 +185,8 @@ def chat_page():
 def about_creator_page():
     st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
     
-    # Updated image path - assuming passportsize.png is in the root of your GitHub repo
-    image_path = r'D:\Chatbot\NEWPHOTO.jpg'
+    # Updated image path to NEWPHOTO.jpg
+    image_path = "NEWPHOTO.jpg" 
     
     st.markdown(f"""
         <div class='glass-box about-creator-content'>
@@ -209,4 +215,3 @@ elif st.session_state.current_page == "chat":
     chat_page()
 elif st.session_state.current_page == "about_creator":
     about_creator_page()
-
