@@ -1,0 +1,163 @@
+I can't directly edit your local files, but I can provide you with the full, revised content for your guardian_knowledge_base.txt file that meets your requirements. You can copy and paste this into your file to update it.
+
+This revised content includes:
+
+An expanded section on common fraud tactics.
+
+A more detailed section on security protocols and best practices.
+
+A section on what to do if you are a victim of fraud.
+
+A revised "Sample Transactions" section that includes 15 fraudulent and 15 legitimate transactions, as you requested.
+
+guardian_knowledge_base.txt
+This document contains our institution's official security protocols, fraud prevention guidelines, and best practices for our customers. This information is the foundational knowledge for the Guardian Chatbot, ensuring all guidance is accurate, consistent, and up-to-date.
+
+Section 1: Common Fraud Tactics & Definitions
+This section defines the most common types of financial fraud and scams that our customers may encounter.
+
+1. Phishing
+Phishing is a deceptive practice where fraudsters attempt to trick you into revealing personal information, such as passwords, account numbers, or Social Security Numbers. These attacks are typically carried out via fake emails, text messages, or websites that look legitimate. They often create a sense of urgency, claiming there's a problem with your account, suspicious activity, or that you've won a prize.
+
+Red Flags: Misspelled company names, generic greetings ("Dear Customer"), urgent demands to click a link, and requests for sensitive information.
+
+Our Protocol: Our institution will never ask for your password, PIN, or full account number via email or text message. Always check the sender's email address and the URL of any link. If a request seems suspicious, contact us directly using the phone number on the back of your card or on our official website.
+
+2. Identity Theft
+Identity theft is a broad term for the fraudulent use of another person's identifying information to commit crimes. This can involve opening new credit accounts, filing fraudulent tax returns, or stealing funds from existing accounts.
+
+Types of Identity Theft:
+
+Financial Identity Theft: The most common form, involving unauthorized access to credit or bank accounts.
+
+Synthetic Identity Theft: A more sophisticated form where a fraudster combines real and fake information to create a new, fraudulent identity.
+
+Our Protocol: The Guardian chatbot is designed to help you identify the early signs of identity theft. If you notice unfamiliar accounts on your credit report or receive bills for products you didn't purchase, contact our fraud department immediately.
+
+3. Account Takeover (ATO) Fraud
+Account Takeover occurs when a criminal gains unauthorized access to your online account. This is often a result of other scams like phishing, using stolen credentials from a data breach, or through malware. Once in, the fraudster can change passwords, make unauthorized purchases, or transfer funds.
+
+Warning Signs: Unfamiliar login attempts, changes to your password or contact information that you did not make, and unauthorized transactions.
+
+Our Protocol: The Guardian chatbot is equipped with real-time monitoring to detect unusual activity. If we see a login attempt from a new location or a large, uncharacteristic transaction, the chatbot will proactively alert you to verify the activity.
+
+Section 2: Verification Protocols & Secure Chat Guidance
+This section outlines the secure procedures for interacting with the Guardian Chatbot to ensure your information is always protected.
+
+1. Identity Verification
+For your protection, the Guardian Chatbot will never ask for the following sensitive information directly in the chat:
+
+Your full Social Security Number (SSN).
+
+Your full credit card or debit card number.
+
+Your account PIN or password.
+
+Your mother's maiden name or the answer to a security question.
+
+2. Suspicious Activity Alerts
+When the Guardian Chatbot detects a suspicious transaction, it will initiate a concise verification process.
+
+Alert Message: The chatbot will provide a clear, easy-to-understand alert (e.g., "We have detected a $500 purchase at an unfamiliar location. Was this you?").
+
+Verification Steps: If you respond "No," the chatbot will guide you through secure, pre-defined steps. It may ask you to confirm a recent legitimate transaction or provide a simple one-time verification code from an authenticator app.
+
+Escalation Protocol: The chatbot will never attempt to resolve a complex fraud case on its own. Its purpose is to verify or deny the activity. If fraud is confirmed, it will provide a clear, actionable plan, such as "To fully secure your account, we recommend you immediately lock your card and call our official fraud hotline at [Your Company's Secure Phone Number]."
+
+Section 3: Account Security Best Practices
+This section contains our top security tips to help you proactively protect your accounts and personal information.
+
+1. Password Management
+Use Strong, Unique Passwords: Your passwords should be at least 12 characters long and use a mix of uppercase and lowercase letters, numbers, and symbols. A passphrase (a sentence you can easily remember) is a great alternative.
+
+Avoid Reusing Passwords: Never use the same password for multiple accounts. If one is compromised, all your other accounts are at risk.
+
+Utilize a Password Manager: Consider using a secure password manager to create and store complex passwords for all your accounts.
+
+2. Multi-Factor Authentication (MFA)
+Enable MFA: Always enable Multi-Factor Authentication on your accounts. This adds a critical layer of security. Even if a criminal steals your password, they cannot access your account without a second verification step.
+
+Avoid SMS for MFA: While SMS is better than nothing, it is less secure than an authenticator app (like Google Authenticator or Microsoft Authenticator) due to the risk of "SIM-swapping."
+
+3. Device and Network Security
+Keep Software Updated: Regularly update your computer's operating system, browser, and all mobile apps. These updates often contain critical security patches.
+
+Avoid Public Wi-Fi: Do not log into your financial accounts or make purchases while connected to public, unsecured Wi-Fi networks. These networks are often vulnerable to hackers.
+
+Install Antivirus Software: Use reputable antivirus and anti-malware software on your devices to protect against malicious programs.
+
+Section 4: What to Do If You're a Victim
+This section provides clear, immediate steps for customers who believe they have been a victim of fraud.
+
+Step 1: Lock Your Cards: If you suspect fraud, immediately lock your debit and credit cards using our mobile app or website.
+
+Step 2: Report to Our Fraud Team: Call our official fraud hotline at [Your Company's Secure Phone Number] to report the incident.
+
+Step 3: Monitor Your Accounts: Regularly check your account statements and credit report for any unfamiliar activity.
+
+Step 4: Change Passwords: Change your passwords for all of your financial accounts and any other services that may have been compromised.
+
+Section 5: Sample Transactions for Fraud Analysis
+This section contains anonymized and sanitized transaction data used for training the Guardian Chatbot's fraud detection model and for providing illustrative examples to users.
+
+Sample Fraudulent Transactions
+Transaction ID: TXN_32321, User ID: USER_2017, Amount: $58.80, Type: Online, Location: Sydney, Status: FRAUDULENT
+
+Transaction ID: TXN_26118, User ID: USER_5978, Amount: $147.99, Type: Bank Transfer, Location: London, Status: FRAUDULENT
+
+Transaction ID: TXN_2808, User ID: USER_3130, Amount: $44.51, Type: Online, Location: New York, Status: FRAUDULENT
+
+Transaction ID: TXN_30546, User ID: USER_4810, Amount: $137.06, Type: Bank Transfer, Location: New York, Status: FRAUDULENT
+
+Transaction ID: TXN_8756, User ID: USER_5931, Amount: $272.04, Type: POS, Location: Mumbai, Status: FRAUDULENT
+
+Transaction ID: TXN_41156, User ID: USER_8080, Amount: $79.23, Type: ATM Withdrawal, Location: Sydney, Status: FRAUDULENT
+
+Transaction ID: TXN_13471, User ID: USER_2767, Amount: $22.34, Type: ATM Withdrawal, Location: Mumbai, Status: FRAUDULENT
+
+Transaction ID: TXN_44754, User ID: USER_8946, Amount: $29.10, Type: Online, Location: London, Status: FRAUDULENT
+
+Transaction ID: TXN_10333, User ID: USER_7391, Amount: $21.96, Type: ATM Withdrawal, Location: New York, Status: FRAUDULENT
+
+Transaction ID: TXN_33574, User ID: USER_4324, Amount: $31.10, Type: Online, Location: New York, Status: FRAUDULENT
+
+Transaction ID: TXN_37998, User ID: USER_8612, Amount: $183.37, Type: Online, Location: London, Status: FRAUDULENT
+
+Transaction ID: TXN_31576, User ID: USER_2323, Amount: $18.48, Type: Online, Location: Sydney, Status: FRAUDULENT
+
+Transaction ID: TXN_47505, User ID: USER_2286, Amount: $128.28, Type: Online, Location: New York, Status: FRAUDULENT
+
+Transaction ID: TXN_24247, User ID: USER_4552, Amount: $55.24, Type: Online, Location: Tokyo, Status: FRAUDULENT
+
+Transaction ID: TXN_19179, User ID: USER_4201, Amount: $185.34, Type: Online, Location: Sydney, Status: FRAUDULENT
+
+Sample Legitimate Transactions
+Transaction ID: TXN_23821, User ID: USER_2903, Amount: $45.81, Type: Bank Transfer, Location: Tokyo, Status: LEGITIMATE
+
+Transaction ID: TXN_2841, User ID: USER_6565, Amount: $13.11, Type: Online, Location: Sydney, Status: LEGITIMATE
+
+Transaction ID: TXN_6870, User ID: USER_6024, Amount: $130.16, Type: ATM Withdrawal, Location: New York, Status: LEGITIMATE
+
+Transaction ID: TXN_3426, User ID: USER_4901, Amount: $145.35, Type: Online, Location: London, Status: LEGITIMATE
+
+Transaction ID: TXN_34458, User ID: USER_1301, Amount: $60.25, Type: Bank Transfer, Location: Tokyo, Status: LEGITIMATE
+
+Transaction ID: TXN_22634, User ID: USER_6943, Amount: $457.06, Type: POS, Location: Tokyo, Status: LEGITIMATE
+
+Transaction ID: TXN_48276, User ID: USER_5179, Amount: $25.96, Type: POS, Location: Sydney, Status: LEGITIMATE
+
+Transaction ID: TXN_27249, User ID: USER_8245, Amount: $13.60, Type: Online, Location: London, Status: LEGITIMATE
+
+Transaction ID: TXN_17281, User ID: USER_2982, Amount: $47.71, Type: Online, Location: Tokyo, Status: LEGITIMATE
+
+Transaction ID: TXN_26641, User ID: USER_2981, Amount: $189.78, Type: Online, Location: Sydney, Status: LEGITIMATE
+
+Transaction ID: TXN_5282, User ID: USER_9316, Amount: $53.60, Type: Online, Location: Sydney, Status: LEGITIMATE
+
+Transaction ID: TXN_42610, User ID: USER_6324, Amount: $154.29, Type: ATM Withdrawal, Location: Mumbai, Status: LEGITIMATE
+
+Transaction ID: TXN_20710, User ID: USER_6385, Amount: $13.48, Type: ATM Withdrawal, Location: Mumbai, Status: LEGITIMATE
+
+Transaction ID: TXN_37774, User ID: USER_6980, Amount: $104.39, Type: Bank Transfer, Location: Mumbai, Status: LEGITIMATE
+
+Transaction ID: TXN_7678, User ID: USER_6221, Amount: $0.75, Type: Online, Location: New York, Status: LEGITIMATE

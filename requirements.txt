@@ -1,0 +1,5 @@
+streamlit
+google-generativeai
+sentence-transformers
+faiss-cpu
+requests

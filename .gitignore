@@ -1,0 +1,11 @@
+# Ignore API key files
+config/api_keys.py
+.streamlit/secrets.toml
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore virtual environment folders (if you create one later)
+venv/
+.venv/
