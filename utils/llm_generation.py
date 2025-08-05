@@ -1,12 +1,12 @@
 # File: utils/llm_generation.py
 
 import google.generativeai as genai
-from config.api_keys import get_gemini_api_key # Import the function
+from config.api_keys import get_gemini_api_key
 
-def initialize_llm(): # Removed gemini_api_key argument
+def initialize_llm():
     """Initializes and returns the Google Gemini Pro model."""
     try:
-        GEMINI_API_KEY = get_gemini_api_key() # Get the key using the function
+        GEMINI_API_KEY = get_gemini_api_key()
         if not GEMINI_API_KEY:
             print("Error: GEMINI_API_KEY is not set. Please check your .streamlit/secrets.toml or Streamlit Cloud secrets.")
             return None
@@ -26,7 +26,7 @@ def generate_answer_from_context(model, query, context, response_mode="Concise")
     Args:
         model: The initialized GenerativeModel instance.
         query (str): The user's original query.
-        context (str): The text chunks retrieved from the knowledge base.
+        context (str): The text chunks retrieved from the knowledge base or web search.
         response_mode (str): The desired response mode ('Concise' or 'Detailed').
 
     Returns:
@@ -36,13 +36,13 @@ def generate_answer_from_context(model, query, context, response_mode="Concise")
         return "I'm sorry, I don't have enough information to answer that question."
 
     if response_mode.lower() == "detailed":
-        prompt_instruction = "Give a detailed, in-depth, and expanded response based on the context. Do not use any outside information."
-    else:
-        prompt_instruction = "Give a short, concise, and summarized answer based on the context. Do not use any outside information."
+        prompt_instruction = "Provide a detailed, in-depth, and comprehensive answer based *only* on the provided context. Synthesize information from the context to answer the question thoroughly. Do not use any outside information."
+    else: # Default to Concise
+        prompt_instruction = "Provide a short, concise, and summarized answer based *only* on the provided context. Extract the key information to answer the question briefly. Do not use any outside information."
 
     prompt = f"""
     You are a helpful assistant. {prompt_instruction}
-    If the context does not contain the answer, say that you don't have enough information.
+    If the provided context does not contain enough information to fully answer the question, state that you do not have enough information *specifically from the provided context*. Do not make up information.
 
     Context:
     {context}
