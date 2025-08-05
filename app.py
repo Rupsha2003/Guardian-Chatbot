@@ -4,24 +4,33 @@ import streamlit as st
 import os
 import sys
 
-# Get the absolute path to the directory where app.py resides (which is your project root)
-project_root = os.path.dirname(os.path.abspath(__file__))
-# Add the project root to sys.path so all modules can be imported directly
-sys.path.insert(0, project_root) # Use insert(0, ...) to ensure it's checked first
+# --- Robust Path Handling for Streamlit Cloud and Local ---
+# Get the absolute path to the directory where app.py resides
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Add the project root to sys.path.
+# This ensures that 'config', 'models', and 'utils' can be imported directly.
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
 
-# Now, all imports should work relative to the project_root
+# Import the backend logic from your utils folder
+# These imports now rely on the project_root being in sys.path
 from models.embeddings import GuardianEmbeddings
 from utils.rag_utils import load_and_chunk_document, create_vector_store, retrieve_relevant_info
 from utils.web_search import perform_web_search
 from utils.llm_generation import initialize_llm, generate_answer_from_context
 
-# --- Rest of your app.py code remains the same ---
+# --- Setup the Streamlit UI and "Liquid Glass" CSS ---
 st.set_page_config(layout="wide", page_title="Guardian Chatbot")
 
 # Inject custom CSS for the "liquid glass" effect
 def load_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    # Ensure CSS file path is correct relative to app.py
+    css_path = os.path.join(current_dir, file_name)
+    if os.path.exists(css_path):
+        with open(css_path) as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    else:
+        st.error(f"CSS file not found: {css_path}")
 
 load_css("style.css")
 
@@ -46,13 +55,13 @@ if "faiss_index" not in st.session_state:
             st.error("Failed to initialize the LLM model. Please check your API key and try again.")
             st.stop()
         
-        # This path should be relative to the app.py if it's in the root
-        file_path = "transactions_knowledge_base.txt"
-        if not os.path.exists(file_path):
-            st.error(f"Error: The file '{file_path}' was not found.")
+        # Ensure this path is correct relative to the project root
+        knowledge_base_path = os.path.join(current_dir, "transactions_knowledge_base.txt")
+        if not os.path.exists(knowledge_base_path):
+            st.error(f"Error: The knowledge base file '{knowledge_base_path}' was not found.")
             st.stop()
 
-        document_chunks = load_and_chunk_document(file_path)
+        document_chunks = load_and_chunk_document(knowledge_base_path)
         faiss_index, _ = create_vector_store(document_chunks, embeddings_model)
 
         return embeddings_model, llm_model, faiss_index, document_chunks
@@ -124,3 +133,4 @@ if prompt := st.chat_input("Ask a question about fraud, security, or anything el
             st.markdown(final_answer)
 
     st.session_state.messages.append({"role": "assistant", "content": final_answer})
+
