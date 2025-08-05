@@ -82,8 +82,8 @@ def navigate_to(page_name):
 # --- Home Page Function ---
 def home_page():
     st.markdown("<h1 class='liquid-title home-title'>Guardian AI</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='glass-box description-box home-welcome'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p>", unsafe_allow_html=True)
-    st.markdown("<p class='glass-box home-tagline'>Empowering you with knowledge to protect your financial well-being.</p>", unsafe_allow_html=True)
+    st.markdown("<center><p class='glass-box description-box home-welcome'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p></center>", unsafe_allow_html=True)
+    st.markdown("<center><p class='glass-box home-tagline'>Empowering you with knowledge to protect your financial well-being.</p></center>", unsafe_allow_html=True)
 
     st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
     
@@ -180,7 +180,7 @@ def about_creator_page():
     st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
     
     # Updated image path - assuming passportsize.png is in the root of your GitHub repo
-    image_path = "passportsize.png" 
+    image_path = "D:\Chatbot\NEWPHOTO.jpg" 
     
     st.markdown(f"""
         <div class='glass-box about-creator-content'>
