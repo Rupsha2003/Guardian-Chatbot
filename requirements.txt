@@ -3,3 +3,5 @@ google-generativeai
 sentence-transformers
 faiss-cpu
 requests
+langchain-community  # <-- Add this line
+langchain-text-splitters # <-- Also add this, as it's a new modularized dependency
