@@ -3,28 +3,10 @@
 import streamlit as st
 import os
 
-# --- API Key Retrieval Functions (Moved from config/api_keys.py) ---
-# These functions are now directly in app.py for robust deployment
-def get_serper_api_key():
-    """Fetches the Serper API key from Streamlit secrets or environment variables."""
-    try:
-        return st.secrets["SERPER_API_KEY"]
-    except KeyError:
-        # Fallback for local testing if not using .streamlit/secrets.toml
-        return os.environ.get("SERPER_API_KEY", "")
-
-def get_gemini_api_key():
-    """Fetches the Gemini API key from Streamlit secrets or environment variables."""
-    try:
-        return st.secrets["GEMINI_API_KEY"]
-    except KeyError:
-        # Fallback for local testing if not using .streamlit/secrets.toml
-        return os.environ.get("GEMINI_API_KEY", "")
-# --- End API Key Retrieval Functions ---
-
+# --- Import API Key Retrieval Functions ---
+from config.api_keys import get_serper_api_key, get_gemini_api_key
 
 # --- Import Backend Logic ---
-# These imports now rely on their direct paths relative to app.py
 from models.embeddings import GuardianEmbeddings
 from utils.rag_utils import load_and_chunk_document, create_vector_store, retrieve_relevant_info
 from utils.web_search import perform_web_search
@@ -131,6 +113,11 @@ def chat_page():
         if st.button("Clear Chat History"):
             st.session_state.messages = []
             st.rerun() # Rerun to clear messages and refresh
+        
+        st.markdown("---") # Separator
+        if st.button("Back to Home", key="back_to_home_button"): # Added back to home button
+            st.session_state.current_page = "home"
+            st.rerun()
 
     # Display Chat Messages
     for message in st.session_state.messages:
@@ -152,7 +139,7 @@ def chat_page():
                 
                 if is_search_query and not any(kw in prompt.lower() for kw in ["fraud", "security", "transaction", "phishing", "identity theft", "account takeover", "bnpl"]):
                     st.info("Performing a live web search as requested.")
-                    web_results = perform_web_search(prompt) # No need to pass key, it's retrieved in web_search.py
+                    web_results = perform_web_search(prompt)
                     if web_results:
                         final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
                     else:
@@ -167,7 +154,7 @@ def chat_page():
                     else:
                         st.warning("No relevant information found in the local knowledge base or context was too short.")
                         st.info("Performing a web search as a fallback...")
-                        web_results = perform_web_search(prompt) # No need to pass key, it's retrieved in web_search.py
+                        web_results = perform_web_search(prompt)
                         if web_results:
                             final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
                         else:
@@ -182,3 +169,4 @@ if st.session_state.current_page == "home":
     home_page()
 else:
     chat_page()
+
