@@ -2,28 +2,23 @@
 
 import streamlit as st
 import os
-import sys
 
-# --- Robust Path Handling for Streamlit Cloud and Local ---
-# Get the absolute path to the directory where app.py resides
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Add the project root to sys.path.
-# This ensures that 'config', 'models', and 'utils' can be imported directly.
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+# --- Import API Key Retrieval Functions ---
+# This import relies on the project root being in sys.path or implicit package discovery
+from config.api_keys import get_serper_api_key, get_gemini_api_key
 
-# Import the backend logic from your utils folder
-# These imports now rely on the project_root being in sys.path
+# --- Import Backend Logic ---
 from models.embeddings import GuardianEmbeddings
 from utils.rag_utils import load_and_chunk_document, create_vector_store, retrieve_relevant_info
 from utils.web_search import perform_web_search
 from utils.llm_generation import initialize_llm, generate_answer_from_context
 
-# Import api_keys directly here, as app.py is at the root
-import config.api_keys # New: Import the config module directly
 
 # --- Setup the Streamlit UI and "Liquid Glass" CSS ---
 st.set_page_config(layout="wide", page_title="Guardian Chatbot")
+
+# Get the absolute path to the directory where app.py resides
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Inject custom CSS for the "liquid glass" effect
 def load_css(file_name):
@@ -53,10 +48,10 @@ if "faiss_index" not in st.session_state:
         embeddings_model = GuardianEmbeddings()
 
         # Get API keys using the functions from config.api_keys
-        serper_key = config.api_keys.get_serper_api_key()
-        gemini_key = config.api_keys.get_gemini_api_key()
+        serper_key = get_serper_api_key()
+        gemini_key = get_gemini_api_key()
 
-        llm_model = initialize_llm(gemini_key) # Pass Gemini key
+        llm_model = initialize_llm() # No need to pass key here, initialize_llm gets it
         if not llm_model:
             st.error("Failed to initialize the LLM model. Please check your API key and try again.")
             st.stop()
@@ -69,7 +64,6 @@ if "faiss_index" not in st.session_state:
         document_chunks = load_and_chunk_document(knowledge_base_path)
         faiss_index, _ = create_vector_store(document_chunks, embeddings_model)
 
-        # Return serper_key as well, so it can be used later
         return embeddings_model, llm_model, faiss_index, document_chunks, serper_key
 
     st.session_state.embeddings_model, st.session_state.llm_model, st.session_state.faiss_index, st.session_state.document_chunks, st.session_state.serper_api_key = setup_backend()
@@ -115,7 +109,6 @@ if prompt := st.chat_input("Ask a question about fraud, security, or anything el
             
             if is_search_query and not any(kw in prompt.lower() for kw in ["fraud", "security", "transaction", "phishing", "identity theft", "account takeover", "bnpl"]):
                 st.info("Performing a live web search as requested.")
-                # Pass serper_api_key to perform_web_search
                 web_results = perform_web_search(prompt, st.session_state.serper_api_key)
                 if web_results:
                     final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
@@ -131,14 +124,13 @@ if prompt := st.chat_input("Ask a question about fraud, security, or anything el
                 else:
                     st.warning("No relevant information found in the local knowledge base or context was too short.")
                     st.info("Performing a web search as a fallback...")
-                    # Pass serper_api_key to perform_web_search
                     web_results = perform_web_search(prompt, st.session_state.serper_api_key)
                     if web_results:
                         final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
                     else:
                         final_answer = "Sorry, I couldn't find an answer in either the knowledge base or a web search."
-            
-            st.markdown(final_answer)
+                
+                st.markdown(final_answer)
 
     st.session_state.messages.append({"role": "assistant", "content": final_answer})
 
