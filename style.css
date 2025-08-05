@@ -72,6 +72,14 @@ body::after {
   box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4); /* Stronger shadow for glass effect */
 }
 
+/* Specific style for home page title */
+.home-title {
+    font-size: 4.5rem; /* Larger for homepage */
+    margin-top: 2rem;
+    margin-bottom: 0.2em;
+}
+
+
 .liquid-subtitle {
   color: #1e90ff; /* Dodger Blue */
   text-align: center;
@@ -100,10 +108,17 @@ body::after {
     line-height: 1.7;
 }
 
-.about-me-box {
+.home-welcome {
+    font-size: 1.5em; /* Larger for homepage welcome */
+    max-width: 700px;
+    margin-top: 1rem;
+}
+
+.about-me-box, .about-creator-content {
     font-size: 1.05em;
     line-height: 1.6;
     text-align: left;
+    max-width: 800px; /* Adjust width for content */
 }
 
 /* Streamlit's main content container (adjust if necessary) */
@@ -155,7 +170,7 @@ body::after {
 
 /* Custom buttons */
 .st-emotion-cache-1n6441g button, .st-emotion-cache-1n6441g a,
-.start-chat-button-container button {
+.home-buttons-container button { /* Apply to all custom buttons */
   background-color: #00bfff; /* Deep Sky Blue */
   color: #000a12; /* Very dark blue text */
   border-radius: 10px; /* More rounded buttons */
@@ -163,20 +178,26 @@ body::after {
   font-weight: bold;
   padding: 12px 25px; /* Larger padding */
   box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4); /* Blue shadow */
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Smooth transition for hover */
   cursor: pointer;
+  margin: 10px; /* Space between buttons */
+  min-width: 250px; /* Ensure buttons are wide enough */
 }
 
 .st-emotion-cache-1n6441g button:hover, .st-emotion-cache-1n6441g a:hover,
-.start-chat-button-container button:hover {
+.home-buttons-container button:hover {
   background-color: #1e90ff; /* Dodger Blue on hover */
   box-shadow: 0 6px 20px rgba(0, 191, 255, 0.6);
   transform: translateY(-3px); /* More pronounced lift */
 }
 
-.start-chat-button-container {
+.home-buttons-container {
     text-align: center;
     margin-top: 3rem;
+    display: flex; /* Use flexbox for button layout */
+    justify-content: center; /* Center buttons horizontally */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 20px; /* Gap between buttons */
 }
 
 
@@ -219,3 +240,70 @@ body::after {
 .glass-box p {
     color: #e0e0e0;
 }
+
+/* Circular Image for About Creator Page */
+.circular-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.circular-image {
+    width: 200px; /* Adjust size as needed */
+    height: 200px;
+    border-radius: 50%; /* Makes it circular */
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    border: 5px solid #00bfff; /* Blue border around the circle */
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.5); /* Glowing effect */
+    transition: transform 0.3s ease;
+}
+
+.circular-image:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Floating Slide for Radio Buttons (Concise/Detailed) */
+.liquid-radio-container {
+    background: rgba(10, 25, 47, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 191, 255, 0.2);
+    padding: 10px;
+    margin-bottom: 20px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Streamlit's internal radio button layout (might need adjustment if Streamlit changes) */
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p { /* Target the radio button container */
+    display: flex;
+    justify-content: space-around; /* Distribute items evenly */
+    width: 100%;
+}
+
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label { /* Target individual radio button labels */
+    flex-grow: 1;
+    text-align: center;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent; /* Default transparent border */
+    color: #e0e0e0;
+}
+
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label:has(input:checked) { /* Style for selected radio button */
+    background-color: #00bfff; /* Blue background when selected */
+    color: #000a12; /* Dark text when selected */
+    border-color: #00bfff; /* Blue border when selected */
+    box-shadow: 0 2px 10px rgba(0, 191, 255, 0.4);
+}
+
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label:hover {
+    background-color: rgba(0, 191, 255, 0.1); /* Light blue hover effect */
+}
+
+/* Hide Streamlit's default radio circles */
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p input[type="radio"] {
+    display: none;
+}
+

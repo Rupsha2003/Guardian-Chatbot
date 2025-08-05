@@ -74,23 +74,26 @@ if "current_page" not in st.session_state:
     st.session_state.current_page = "home"
 
 
+# --- Page Navigation Functions ---
+def navigate_to(page_name):
+    st.session_state.current_page = page_name
+    st.rerun()
+
 # --- Home Page Function ---
 def home_page():
-    st.markdown("<h1 class='liquid-title'>Guardian AI</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='glass-box description-box'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention. This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>", unsafe_allow_html=True)
+    st.markdown("<h1 class='liquid-title home-title'>Guardian AI</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='glass-box description-box home-welcome'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p>", unsafe_allow_html=True)
 
-    st.markdown("<h2 class='liquid-subtitle'>About the Creator</h2>", unsafe_allow_html=True)
-    st.markdown("""
-        <div class='glass-box about-me-box'>
-            <p>Hello! I'm Rupsha, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
-            <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("<div class='start-chat-button-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
+    
+    # Start Chatting Button
     if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
-        st.session_state.current_page = "chat"
-        st.rerun() # Rerun to switch to the chat page
+        navigate_to("chat")
+    
+    # About the Creator Button
+    if st.button("About the Creator", key="about_creator_button"):
+        navigate_to("about_creator")
+        
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -103,21 +106,27 @@ def chat_page():
     with st.sidebar:
         st.markdown("<h2 class='liquid-subtitle'>Chat Settings</h2>", unsafe_allow_html=True)
         
+        # Floating slide for Response Mode
+        st.markdown("<div class='liquid-radio-container'>", unsafe_allow_html=True)
         response_mode = st.radio(
             "Response Mode:",
             ("Concise", "Detailed"),
             index=0,
+            horizontal=True, # Make it horizontal for a slide-like appearance
             help="Choose between short, summarized replies or expanded, in-depth responses."
         )
+        st.markdown("</div>", unsafe_allow_html=True)
         
         if st.button("Clear Chat History"):
             st.session_state.messages = []
             st.rerun() # Rerun to clear messages and refresh
         
         st.markdown("---") # Separator
-        if st.button("Back to Home", key="back_to_home_button"): # Added back to home button
-            st.session_state.current_page = "home"
-            st.rerun()
+        if st.button("Back to Home", key="back_to_home_from_chat"):
+            navigate_to("home")
+        if st.button("Go to About Creator", key="about_from_chat"):
+            navigate_to("about_creator")
+
 
     # Display Chat Messages
     for message in st.session_state.messages:
@@ -164,9 +173,40 @@ def chat_page():
 
         st.session_state.messages.append({"role": "assistant", "content": final_answer})
 
-# --- Main App Logic (Page Navigation) ---
+
+# --- About Creator Page Function ---
+def about_creator_page():
+    st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
+    
+    # Placeholder for Rupsha's picture
+    # IMPORTANT: Replace this URL with your actual image URL!
+    image_url = "https://placehold.co/200x200/00bfff/ffffff?text=Rupsha" 
+    
+    st.markdown(f"""
+        <div class='glass-box about-creator-content'>
+            <div class='circular-image-container'>
+                <img src='{image_url}' class='circular-image' alt='Rupsha Das'>
+            </div>
+            <p>Hello! I'm Rupsha Das, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
+            <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>
+            <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Sidebar for Navigation
+    with st.sidebar:
+        st.markdown("<h2 class='liquid-subtitle'>Navigation</h2>", unsafe_allow_html=True)
+        if st.button("Back to Home", key="back_to_home_from_about"):
+            navigate_to("home")
+        if st.button("Go to Chat", key="chat_from_about"):
+            navigate_to("chat")
+
+
+# --- Main App Logic (Page Routing) ---
 if st.session_state.current_page == "home":
     home_page()
-else:
+elif st.session_state.current_page == "chat":
     chat_page()
+elif st.session_state.current_page == "about_creator":
+    about_creator_page()
 
