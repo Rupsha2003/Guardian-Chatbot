@@ -1,13 +1,14 @@
 # File: utils/llm_generation.py
 
 import google.generativeai as genai
-# Import the function to get the API key
-from config.api_keys import get_gemini_api_key
+# Import the config.api_keys module
+import config.api_keys # Changed import
 
 def initialize_llm():
     """Initializes and returns the Google Gemini Pro model."""
     try:
-        GEMINI_API_KEY = get_gemini_api_key() # Get the key using the function
+        # Access the function via the imported module
+        GEMINI_API_KEY = config.api_keys.get_gemini_api_key()
         if not GEMINI_API_KEY:
             print("Error: GEMINI_API_KEY is not set. Please check your .streamlit/secrets.toml or Streamlit Cloud secrets.")
             return None

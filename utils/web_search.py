@@ -3,8 +3,8 @@
 import requests
 import json
 import os
-# Import the function to get the API key
-from config.api_keys import get_serper_api_key
+# Import the config.api_keys module
+import config.api_keys # Changed import
 
 def perform_web_search(query, num_results=3):
     """
@@ -18,7 +18,8 @@ def perform_web_search(query, num_results=3):
         str: A formatted string containing the titles, snippets, and links of the top search results.
              Returns an empty string if the search fails.
     """
-    SERPER_API_KEY = get_serper_api_key() # Get the key using the function
+    # Access the function via the imported module
+    SERPER_API_KEY = config.api_keys.get_serper_api_key()
     if not SERPER_API_KEY:
         print("Error: SERPER_API_KEY is not set. Please check your .streamlit/secrets.toml or Streamlit Cloud secrets.")
         return "Search functionality is not configured."
