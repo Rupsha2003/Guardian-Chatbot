@@ -4,10 +4,12 @@ import streamlit as st
 import os
 import sys
 
-# Corrected line: Add the current script's directory (which is your project root) to the Python path
-sys.path.append(os.path.dirname(__file__))
+# Get the absolute path to the directory where app.py resides (which is your project root)
+project_root = os.path.dirname(os.path.abspath(__file__))
+# Add the project root to sys.path so all modules can be imported directly
+sys.path.insert(0, project_root) # Use insert(0, ...) to ensure it's checked first
 
-# Import the backend logic from your utils folder
+# Now, all imports should work relative to the project_root
 from models.embeddings import GuardianEmbeddings
 from utils.rag_utils import load_and_chunk_document, create_vector_store, retrieve_relevant_info
 from utils.web_search import perform_web_search
