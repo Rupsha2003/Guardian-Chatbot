@@ -83,6 +83,7 @@ def navigate_to(page_name):
 def home_page():
     st.markdown("<h1 class='liquid-title home-title'>Guardian AI</h1>", unsafe_allow_html=True)
     st.markdown("<p class='glass-box description-box home-welcome'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p>", unsafe_allow_html=True)
+    st.markdown("<p class='glass-box home-tagline'>Empowering you with knowledge to protect your financial well-being.</p>", unsafe_allow_html=True)
 
     st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
     
@@ -178,14 +179,13 @@ def chat_page():
 def about_creator_page():
     st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
     
-    # Placeholder for Rupsha's picture
-    # IMPORTANT: Replace this URL with your actual image URL!
-    image_url = "https://placehold.co/200x200/00bfff/ffffff?text=Rupsha" 
+    # Updated image path - assuming passportsize.png is in the root of your GitHub repo
+    image_path = "passportsize.png" 
     
     st.markdown(f"""
         <div class='glass-box about-creator-content'>
             <div class='circular-image-container'>
-                <img src='{image_url}' class='circular-image' alt='Rupsha Das'>
+                <img src='{image_path}' class='circular-image' alt='Rupsha Das'>
             </div>
             <p>Hello! I'm Rupsha Das, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
             <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>

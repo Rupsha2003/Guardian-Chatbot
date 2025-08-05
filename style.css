@@ -109,9 +109,18 @@ body::after {
 }
 
 .home-welcome {
-    font-size: 1.5em; /* Larger for homepage welcome */
+    font-size: 1.8em; /* Even larger for homepage welcome */
     max-width: 700px;
     margin-top: 1rem;
+    font-weight: 500;
+}
+
+.home-tagline {
+    font-size: 1.2em; /* Tagline font size */
+    max-width: 600px;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.8;
 }
 
 .about-me-box, .about-creator-content {
@@ -195,7 +204,10 @@ body::after {
     text-align: center;
     margin-top: 3rem;
     display: flex; /* Use flexbox for button layout */
-    justify-content: center; /* Center buttons horizontally */
+    justify-content: space-between; /* Push buttons to ends */
+    max-width: 600px; /* Limit width to control spacing */
+    margin-left: auto; /* Center the container itself */
+    margin-right: auto;
     flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
     gap: 20px; /* Gap between buttons */
 }
