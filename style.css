@@ -238,7 +238,7 @@ body::after {
     border-radius: 10px;
     background-color: rgba(0, 191, 255, 0.1); /* Blue tint */
     border: 1px solid rgba(0, 191, 255, 0.3);
-    color: #00bfff;
+    color: #1fb1e2;
     box-shadow: 0 2px 10px rgba(0, 191, 255, 0.1);
 }
 .stAlert > div > p {
@@ -266,11 +266,11 @@ body::after {
 }
 
 .circular-image {
-    width: 120px; /* Smaller size */
-    height: 120px; /* Smaller size */
+    width: 150px; /* Smaller size */
+    height: 150px; /* Smaller size */
     border-radius: 50%; /* Makes it circular */
     object-fit: cover; /* Ensures image covers the area without distortion */
-    border: 5px solid #00bfff; /* Blue border around the circle */
+    border: 5px solid #59b7d6; /* Blue border around the circle */
     box-shadow: 0 0 20px rgba(0, 191, 255, 0.5); /* Glowing effect */
     transition: transform 0.3s ease;
 }

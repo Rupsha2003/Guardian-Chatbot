@@ -107,7 +107,7 @@ def home_page():
 # --- Chat Page Function ---
 def chat_page():
     st.markdown("<h1 class='liquid-title'>Guardian AI Chat</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
+    st.markdown("<p class='glass-box description-box'>Ask me about financial security, fraud prevention, or anything that's on your mind. I'm here to help!</p>", unsafe_allow_html=True)
 
     # Sidebar for Response Mode and Chat Management
     with st.sidebar:
