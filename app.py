@@ -66,7 +66,7 @@ if "faiss_index" not in st.session_state:
         serper_key = get_serper_api_key()
         gemini_key = get_gemini_api_key()
 
-        llm_model = initialize_llm(gemini_key)
+        llm_model = initialize_llm()
         if not llm_model:
             st.error("Failed to initialize the LLM model. Please check your API key and try again.")
             st.stop()
