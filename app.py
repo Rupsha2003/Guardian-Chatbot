@@ -3,18 +3,35 @@
 import streamlit as st
 import os
 
-# --- Import API Key Retrieval Functions ---
-# This import relies on the project root being in sys.path or implicit package discovery
-from config.api_keys import get_serper_api_key, get_gemini_api_key
+# --- API Key Retrieval Functions (Moved from config/api_keys.py) ---
+# These functions are now directly in app.py for robust deployment
+def get_serper_api_key():
+    """Fetches the Serper API key from Streamlit secrets or environment variables."""
+    try:
+        return st.secrets["SERPER_API_KEY"]
+    except KeyError:
+        # Fallback for local testing if not using .streamlit/secrets.toml
+        return os.environ.get("SERPER_API_KEY", "")
+
+def get_gemini_api_key():
+    """Fetches the Gemini API key from Streamlit secrets or environment variables."""
+    try:
+        return st.secrets["GEMINI_API_KEY"]
+    except KeyError:
+        # Fallback for local testing if not using .streamlit/secrets.toml
+        return os.environ.get("GEMINI_API_KEY", "")
+# --- End API Key Retrieval Functions ---
+
 
 # --- Import Backend Logic ---
+# These imports now rely on their direct paths relative to app.py
 from models.embeddings import GuardianEmbeddings
 from utils.rag_utils import load_and_chunk_document, create_vector_store, retrieve_relevant_info
 from utils.web_search import perform_web_search
 from utils.llm_generation import initialize_llm, generate_answer_from_context
 
 
-# --- Setup the Streamlit UI and "Liquid Glass" CSS ---
+# --- Setup Streamlit Page Configuration and CSS ---
 st.set_page_config(layout="wide", page_title="Guardian Chatbot")
 
 # Get the absolute path to the directory where app.py resides
@@ -29,29 +46,27 @@ def load_css(file_name):
     else:
         st.error(f"CSS file not found: {css_path}")
 
-load_css("style.css")
-
-st.markdown("<h1 class='liquid-title'>Guardian AI</h1>", unsafe_allow_html=True)
-st.markdown("<p class='glass-box'>Your trusted assistant for fraud prevention and security knowledge. Powered by RAG and live web search.</p>", unsafe_allow_html=True)
+load_css("style.css") # Load the custom CSS
 
 
 # --- Initialize Session State and Backend Components ---
+# This ensures heavy components are loaded only once
 if "faiss_index" not in st.session_state:
     st.session_state.faiss_index = None
     st.session_state.document_chunks = None
     st.session_state.embeddings_model = None
     st.session_state.llm_model = None
+    st.session_state.serper_api_key = None # Store serper key in session state
 
     @st.cache_resource
     def setup_backend():
         st.write("Initializing backend components. This may take a moment...")
         embeddings_model = GuardianEmbeddings()
 
-        # Get API keys using the functions from config.api_keys
         serper_key = get_serper_api_key()
         gemini_key = get_gemini_api_key()
 
-        llm_model = initialize_llm() # No need to pass key here, initialize_llm gets it
+        llm_model = initialize_llm(gemini_key)
         if not llm_model:
             st.error("Failed to initialize the LLM model. Please check your API key and try again.")
             st.stop()
@@ -66,71 +81,104 @@ if "faiss_index" not in st.session_state:
 
         return embeddings_model, llm_model, faiss_index, document_chunks, serper_key
 
-    st.session_state.embeddings_model, st.session_state.llm_model, st.session_state.faiss_index, st.session_state.document_chunks, st.session_state.serper_api_key = setup_backend()
+    st.session_state.embeddings_model, st.session_state.llm_model, \
+    st.session_state.faiss_index, st.session_state.document_chunks, \
+    st.session_state.serper_api_key = setup_backend()
 
-# Initialize chat history
+# Initialize chat history and current page if not already set
 if "messages" not in st.session_state:
     st.session_state.messages = []
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "home"
 
 
-# --- Sidebar for Response Mode and Chat Management ---
-with st.sidebar:
-    st.markdown("<h2 class='liquid-subtitle'>Chat Settings</h2>", unsafe_allow_html=True)
-    
-    response_mode = st.radio(
-        "Response Mode:",
-        ("Concise", "Detailed"),
-        index=0,
-        help="Choose between short, summarized replies or expanded, in-depth responses."
-    )
-    
-    if st.button("Clear Chat History"):
-        st.session_state.messages = []
+# --- Home Page Function ---
+def home_page():
+    st.markdown("<h1 class='liquid-title'>Guardian AI</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='glass-box description-box'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention. This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>", unsafe_allow_html=True)
+
+    st.markdown("<h2 class='liquid-subtitle'>About the Creator</h2>", unsafe_allow_html=True)
+    st.markdown("""
+        <div class='glass-box about-me-box'>
+            <p>Hello! I'm Rupsha, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
+            <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<div class='start-chat-button-container'>", unsafe_allow_html=True)
+    if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
+        st.session_state.current_page = "chat"
+        st.rerun() # Rerun to switch to the chat page
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
-# --- Display Chat Messages ---
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+# --- Chat Page Function ---
+def chat_page():
+    st.markdown("<h1 class='liquid-title'>Guardian AI Chat</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
 
+    # Sidebar for Response Mode and Chat Management
+    with st.sidebar:
+        st.markdown("<h2 class='liquid-subtitle'>Chat Settings</h2>", unsafe_allow_html=True)
+        
+        response_mode = st.radio(
+            "Response Mode:",
+            ("Concise", "Detailed"),
+            index=0,
+            help="Choose between short, summarized replies or expanded, in-depth responses."
+        )
+        
+        if st.button("Clear Chat History"):
+            st.session_state.messages = []
+            st.rerun() # Rerun to clear messages and refresh
 
-# --- Handle User Input ---
-if prompt := st.chat_input("Ask a question about fraud, security, or anything else..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    
-    with st.chat_message("user"):
-        st.markdown(prompt)
+    # Display Chat Messages
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            is_search_query = any(keyword in prompt.lower() for keyword in ["search", "find", "who is", "what is", "tell me about"])
-            
-            final_answer = ""
-            
-            if is_search_query and not any(kw in prompt.lower() for kw in ["fraud", "security", "transaction", "phishing", "identity theft", "account takeover", "bnpl"]):
-                st.info("Performing a live web search as requested.")
-                web_results = perform_web_search(prompt, st.session_state.serper_api_key)
-                if web_results:
-                    final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
-                else:
-                    final_answer = "Sorry, I couldn't find any relevant web search results for your query."
-            else:
-                st.info("Searching local knowledge base...")
-                retrieved_context = retrieve_relevant_info(prompt, st.session_state.faiss_index, st.session_state.document_chunks, st.session_state.embeddings_model)
+    # Handle User Input
+    if prompt := st.chat_input("Ask a question about fraud, security, or anything else..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                is_search_query = any(keyword in prompt.lower() for keyword in ["search", "find", "who is", "what is", "tell me about"])
                 
-                if retrieved_context and len(retrieved_context.strip()) > 50:
-                    st.info("Generating a response from the knowledge base.")
-                    final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, retrieved_context, response_mode)
-                else:
-                    st.warning("No relevant information found in the local knowledge base or context was too short.")
-                    st.info("Performing a web search as a fallback...")
-                    web_results = perform_web_search(prompt, st.session_state.serper_api_key)
+                final_answer = ""
+                
+                if is_search_query and not any(kw in prompt.lower() for kw in ["fraud", "security", "transaction", "phishing", "identity theft", "account takeover", "bnpl"]):
+                    st.info("Performing a live web search as requested.")
+                    web_results = perform_web_search(prompt) # No need to pass key, it's retrieved in web_search.py
                     if web_results:
                         final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
                     else:
-                        final_answer = "Sorry, I couldn't find an answer in either the knowledge base or a web search."
+                        final_answer = "Sorry, I couldn't find any relevant web search results for your query."
+                else:
+                    st.info("Searching local knowledge base...")
+                    retrieved_context = retrieve_relevant_info(prompt, st.session_state.faiss_index, st.session_state.document_chunks, st.session_state.embeddings_model)
+                    
+                    if retrieved_context and len(retrieved_context.strip()) > 50:
+                        st.info("Generating a response from the knowledge base.")
+                        final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, retrieved_context, response_mode)
+                    else:
+                        st.warning("No relevant information found in the local knowledge base or context was too short.")
+                        st.info("Performing a web search as a fallback...")
+                        web_results = perform_web_search(prompt) # No need to pass key, it's retrieved in web_search.py
+                        if web_results:
+                            final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
+                        else:
+                            final_answer = "Sorry, I couldn't find an answer in either the knowledge base or a web search."
                 
                 st.markdown(final_answer)
 
-    st.session_state.messages.append({"role": "assistant", "content": final_answer})
+        st.session_state.messages.append({"role": "assistant", "content": final_answer})
 
+# --- Main App Logic (Page Navigation) ---
+if st.session_state.current_page == "home":
+    home_page()
+else:
+    chat_page()

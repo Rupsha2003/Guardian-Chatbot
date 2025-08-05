@@ -1,9 +1,16 @@
 /* style.css */
 
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0b0c10 0%, #1f2833 100%); /* Subtle gradient background */
+    color: #c5c6c7;
+    min-height: 100vh;
+}
+
 .stApp {
-  background-color: #0b0c10;
+  background-color: transparent; /* Make app background transparent to show body gradient */
   color: #c5c6c7;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .liquid-title {
@@ -13,12 +20,13 @@
   color: #66fcf1;
   text-shadow: 2px 2px 8px rgba(102, 252, 241, 0.5);
   margin-bottom: 0.5em;
-  background: linear-gradient(90deg, #1f2833, #0b0c10);
+  background: rgba(31, 40, 51, 0.7); /* More transparent glass */
   padding: 0.5em;
   border-radius: 12px;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(102, 252, 241, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Stronger shadow for glass effect */
 }
 
 .liquid-subtitle {
@@ -26,43 +34,35 @@
   text-align: center;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  text-shadow: 1px 1px 5px rgba(102, 252, 241, 0.3);
 }
 
 .glass-box {
   background: rgba(31, 40, 51, 0.7);
   border-radius: 12px;
   border: 1px solid rgba(102, 252, 241, 0.2);
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 1.5rem;
+  margin: 1rem auto; /* Center the box */
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   text-align: center;
+  max-width: 800px; /* Limit width for better readability */
 }
 
-.st-emotion-cache-1kyx06v {
-  background: rgba(31, 40, 51, 0.7);
-  border-radius: 12px;
-  border: 1px solid rgba(102, 252, 241, 0.2);
-  padding: 1rem;
-  margin: 1rem 0;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+.description-box {
+    font-size: 1.1em;
+    line-height: 1.6;
 }
 
-.st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v {
-  background: rgba(31, 40, 51, 0.7);
-  border-radius: 12px;
-  border: 1px solid rgba(102, 252, 241, 0.2);
-  padding: 1rem;
-  margin: 1rem 0;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+.about-me-box {
+    font-size: 1em;
+    line-height: 1.5;
+    text-align: left; /* Align text within about me box */
 }
 
-.st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v .st-emotion-cache-1kyx06v {
+/* Streamlit's main container */
+.st-emotion-cache-1kyx06v { /* This class might change with Streamlit updates */
   background: rgba(31, 40, 51, 0.7);
   border-radius: 12px;
   border: 1px solid rgba(102, 252, 241, 0.2);
@@ -74,12 +74,13 @@
 }
 
 /* Chat messages */
-.st-emotion-cache-4m3is1 {
+.st-emotion-cache-4m3is1 { /* Message container */
   border-radius: 12px;
   border: 1px solid rgba(102, 252, 241, 0.2);
+  margin-bottom: 10px;
 }
 
-.st-emotion-cache-1c7icd2 {
+.st-emotion-cache-1c7icd2 { /* Message bubble background */
   background: rgba(31, 40, 51, 0.7);
   border-radius: 12px;
   -webkit-backdrop-filter: blur(10px);
@@ -98,27 +99,41 @@
 }
 
 /* Sidebar */
-.st-emotion-cache-1kyx06v {
-  background-color: rgba(19, 25, 33, 0.7);
+.st-emotion-cache-1d3v0u3 { /* Sidebar main container */
+    background-color: rgba(19, 25, 33, 0.8); /* Slightly darker glass for sidebar */
+    border-right: 1px solid rgba(102, 252, 241, 0.2);
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
 }
 
+
 /* Custom buttons */
-.st-emotion-cache-1n6441g button, .st-emotion-cache-1n6441g a {
+.st-emotion-cache-1n6441g button, .st-emotion-cache-1n6441g a,
+.start-chat-button-container button { /* Apply to new button as well */
   background-color: #66fcf1;
   color: #0b0c10;
   border-radius: 8px;
   border: none;
   font-weight: bold;
+  padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(102, 252, 241, 0.3);
+  transition: all 0.3s ease; /* Smooth transition for hover */
 }
 
-.st-emotion-cache-1n6441g button:hover, .st-emotion-cache-1n6441g a:hover {
+.st-emotion-cache-1n6441g button:hover, .st-emotion-cache-1n6441g a:hover,
+.start-chat-button-container button:hover {
   background-color: #45a29e;
   box-shadow: 0 4px 15px rgba(102, 252, 241, 0.5);
+  transform: translateY(-2px); /* Slight lift effect */
 }
 
+.start-chat-button-container {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+
 /* Chat input */
-.st-emotion-cache-10qtn6p {
+.st-emotion-cache-10qtn6p { /* Chat input container */
   background: rgba(31, 40, 51, 0.7);
   border-radius: 12px;
   -webkit-backdrop-filter: blur(10px);
@@ -129,5 +144,29 @@
 
 .st-emotion-cache-10qtn6p input {
   color: #c5c6c7 !important;
+}
+
+/* Streamlit info/warning boxes */
+.stAlert {
+    border-radius: 8px;
+    background-color: rgba(102, 252, 241, 0.1);
+    border: 1px solid rgba(102, 252, 241, 0.3);
+    color: #66fcf1;
+}
+.stAlert > div > p {
+    color: #66fcf1 !important;
+}
+.stAlert.streamlit-warning {
+    background-color: rgba(255, 204, 0, 0.1);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    color: #ffcc00;
+}
+.stAlert.streamlit-warning > div > p {
+    color: #ffcc00 !important;
+}
+
+/* Ensure text elements within glass boxes are readable */
+.glass-box p {
+    color: #c5c6c7;
 }
 
