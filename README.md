@@ -1,4 +1,4 @@
-Guardian AI 🛡
+Guardian AI Chatbot
 Your Personal Assistant for Financial Security and Fraud Prevention
 
 Introduction
@@ -9,6 +9,7 @@ Features
 Financial Security & Fraud Prevention: Access a comprehensive knowledge base on various types of fraud (phishing, identity theft, account takeover, BNPL fraud), security protocols, and steps to take if you become a victim.
 Retrieval-Augmented Generation (RAG): Efficiently retrieves relevant information from a local knowledge base (transactions_knowledge_base.txt) using advanced embedding models and FAISS vector search.
 Real-time Web Search: Integrates with the Serper API to perform live web searches for queries outside the local knowledge base, ensuring up-to-date and broad information.
+Custom Document Context (NEW!): Beyond its built-in knowledge base, Guardian AI now allows you to upload your own documents (in .txt, .pdf, or .docx formats). This enables the chatbot to provide answers and insights based on the specific content you provide, making it a versatile tool for various information retrieval needs.
 Dual Response Modes: Choose between "Concise" (short, summarized replies) and "Detailed" (expanded, in-depth responses) to tailor the chatbot's output to your needs.
 Sleek "Liquid Glass" UI: A modern and elegant user interface built with Streamlit and custom CSS, featuring blurred glass effects, vibrant blue accents, and a floating background animation.
 Multi-Page Navigation: A structured application with dedicated pages for:
