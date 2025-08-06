@@ -155,7 +155,7 @@ def home_page():
     """, unsafe_allow_html=True)
 
     # Reverted to two columns for left/right button placement
-    st.markdown("<center><div class='home-buttons-container'></center>", unsafe_allow_html=True)
+    st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -172,7 +172,7 @@ def home_page():
 def chat_page():
     st.markdown("<h1 class='liquid-title'>Guardian AI Chat</h1>", unsafe_allow_html=True)
     # Changed class to 'yellow-glass-box' for the description
-    st.markdown("<p class='yellow-glass-box description-box'>Ask me about financial security, fraud prevention, or anything that's on your mind. I'm here to help!</p>", unsafe_allow_html=True)
+    st.markdown("<p class='yellow-glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
 
     # --- File Uploader Section (MOVED TO SIDEBAR) ---
     with st.sidebar:
@@ -328,7 +328,7 @@ def about_creator_page():
             <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>
             <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
             
-            <div class='contact-me-box yellow-glass-box'> {/* New div for contact box */}
+            <div class='contact-me-box yellow-glass-box'>
                 <h3 class='contact-me-title'>Contact Me</h3>
                 <p class='contact-me-email'>Email: <a href='mailto:rups.das.2003@gmail.com'>rups.das.2003@gmail.com</a></p>
             </div>
