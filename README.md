@@ -114,7 +114,7 @@ Contextual Generation: The LLM synthesizes information from either the retrieved
 Response Modes: The utils/llm_generation.py module handles the prompt engineering to produce "Concise" or "Detailed" responses based on user selection.
 
 7. User Interface (UI)
-8. 
+
 Streamlit: Provides the framework for the interactive web application.
 Custom CSS (style.css): Implements the "liquid glass" design, featuring:
 Transparent, blurred elements (titles, content boxes, sidebar, chat input).
@@ -122,7 +122,7 @@ Vibrant blue color palette.
 Subtle floating background animations for a dynamic feel.
 Custom styling for buttons and radio buttons (floating slide effect).
 
-9. Multi-Page Navigation
+Multi-Page Navigation
 The application uses Streamlit's st.session_state to manage navigation between three distinct pages:
 
 Home Page: The landing page introducing Guardian AI.
