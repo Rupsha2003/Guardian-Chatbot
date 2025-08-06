@@ -149,23 +149,22 @@ def home_page():
     
     st.markdown("""
         <div class='glass-box home-welcome-container'>
-            <p class='home-welcome-text'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p>
-            <p class='home-tagline'>Empowering you with knowledge to protect your financial well-being.</p>
+            <center><p class='home-welcome-text'>Welcome to Guardian AI, your personal assistant for financial security and fraud prevention.</p>
+            <p class='home-tagline'>Empowering you with knowledge to protect your financial well-being.</p></center>
         </div>
     """, unsafe_allow_html=True)
 
     # Reverted to two columns for left/right button placement
-    st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='home-buttons-container centered-buttons'>", unsafe_allow_html=True)
     
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
-            navigate_to("chat")
-    with col2:
-        if st.button("About the Creator", key="about_creator_button"):
-            navigate_to("about_creator")
+    if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
+        navigate_to("chat")
+    
+    if st.button("About the Creator", key="about_creator_button"):
+        navigate_to("about_creator")
         
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # --- Chat Page Function ---
@@ -327,7 +326,7 @@ def about_creator_page():
             <p>Hello! I'm Rupsha Das, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
             <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>
             <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
-            <p> Contact me - rups.das.2003@gmail.com </p>
+            <p> <center>Contact me - rups.das.2003@gmail.com </center></p>
             </div>
         </div>
     """, unsafe_allow_html=True)
