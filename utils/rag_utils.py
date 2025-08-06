@@ -2,30 +2,48 @@
 
 import os
 from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter # Corrected import for modularized LangChain
 from langchain_community.vectorstores import FAISS
-from models.embeddings import GuardianEmbeddings # Assuming this is correctly imported
+from models.embeddings import GuardianEmbeddings
 
-def load_and_chunk_document(file_path):
+# LangChain Document class for creating documents from text
+from langchain.docstore.document import Document as LangchainDocument
+
+
+def load_and_chunk_document(file_path=None, file_content=None):
     """
-    Loads a document from the given file path and splits it into chunks.
+    Loads a document from the given file path or processes raw text content,
+    then splits it into chunks.
     """
-    try:
-        loader = TextLoader(file_path)
-        documents = loader.load()
-        
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200,
-            length_function=len,
-            is_separator_regex=False,
-        )
-        chunks = text_splitter.split_documents(documents)
-        print(f"Document loaded and split into {len(chunks)} chunks.")
-        return chunks
-    except Exception as e:
-        print(f"Error loading or chunking document: {e}")
+    documents = []
+    if file_path:
+        try:
+            loader = TextLoader(file_path)
+            documents = loader.load()
+            print(f"Document loaded from path: {file_path}")
+        except Exception as e:
+            print(f"Error loading document from path '{file_path}': {e}")
+            return []
+    elif file_content:
+        # Create a Langchain Document object from the raw text content
+        documents = [LangchainDocument(page_content=file_content, metadata={"source": "uploaded_file"})]
+        print("Document created from uploaded content.")
+    else:
+        print("No file path or content provided for chunking.")
         return []
+
+    if not documents:
+        return []
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len,
+        is_separator_regex=False,
+    )
+    chunks = text_splitter.split_documents(documents)
+    print(f"Document split into {len(chunks)} chunks.")
+    return chunks
 
 def create_vector_store(document_chunks, embeddings_model):
     """
@@ -61,11 +79,8 @@ def retrieve_relevant_info(query, faiss_index, document_chunks, embeddings_model
         return ""
 
     try:
-        # Ensure num_chunks is an integer for slicing
         num_chunks = int(num_chunks) 
         
-        # Perform similarity search
-        # k=num_chunks ensures we get the top 'num_chunks' results
         docs_and_scores = faiss_index.similarity_search_with_score(query, k=num_chunks)
         
         retrieved_texts = []
@@ -80,3 +95,4 @@ def retrieve_relevant_info(query, faiss_index, document_chunks, embeddings_model
     except Exception as e:
         print(f"Error retrieving relevant info: {e}")
         return ""
+

@@ -238,7 +238,7 @@ body::after {
     border-radius: 10px;
     background-color: rgba(0, 191, 255, 0.1); /* Blue tint */
     border: 1px solid rgba(0, 191, 255, 0.3);
-    color: #1fb1e2;
+    color: #00bfff;
     box-shadow: 0 2px 10px rgba(0, 191, 255, 0.1);
 }
 .stAlert > div > p {
@@ -266,11 +266,11 @@ body::after {
 }
 
 .circular-image {
-    width: 150px; /* Smaller size */
-    height: 150px; /* Smaller size */
+    width: 120px; /* Smaller size */
+    height: 120px; /* Smaller size */
     border-radius: 50%; /* Makes it circular */
     object-fit: cover; /* Ensures image covers the area without distortion */
-    border: 5px solid #59b7d6; /* Blue border around the circle */
+    border: 5px solid #00bfff; /* Blue border around the circle */
     box-shadow: 0 0 20px rgba(0, 191, 255, 0.5); /* Glowing effect */
     transition: transform 0.3s ease;
 }
@@ -280,7 +280,7 @@ body::after {
 }
 
 /* Floating Slide for Radio Buttons (Concise/Detailed) */
-.liquid-radio-container {
+.liquid-radio-container { /* Sidebar radio button container */
     background: rgba(10, 25, 47, 0.6);
     border-radius: 10px;
     border: 1px solid rgba(0, 191, 255, 0.2);
@@ -291,14 +291,30 @@ body::after {
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
+.liquid-radio-container-main { /* Main content area radio button container */
+    background: rgba(10, 25, 47, 0.7); /* Match other glass boxes */
+    border-radius: 15px; /* Match other glass boxes */
+    border: 1px solid rgba(0, 191, 255, 0.3); /* Match other glass boxes */
+    padding: 15px; /* More padding */
+    margin: 1rem auto 0.5rem auto; /* Center it, closer to chat input */
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+    max-width: 900px; /* Match main content width */
+}
+
+
 /* Streamlit's internal radio button layout (might need adjustment if Streamlit changes) */
-.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p { /* Target the radio button container */
+/* These apply to both liquid-radio-container and liquid-radio-container-main */
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p, /* Sidebar */
+.liquid-radio-container-main .st-emotion-cache-1v4673p { /* Main content */
     display: flex;
     justify-content: space-around; /* Distribute items evenly */
     width: 100%;
 }
 
-.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label { /* Target individual radio button labels */
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label, /* Sidebar */
+.liquid-radio-container-main .st-emotion-cache-1v4673p label { /* Main content */
     flex-grow: 1;
     text-align: center;
     padding: 8px 15px;
@@ -309,19 +325,22 @@ body::after {
     color: #e0e0e0;
 }
 
-.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label:has(input:checked) { /* Style for selected radio button */
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label:has(input:checked), /* Sidebar */
+.liquid-radio-container-main .st-emotion-cache-1v4673p label:has(input:checked) { /* Main content */
     background-color: #00bfff; /* Blue background when selected */
     color: #000a12; /* Dark text when selected */
     border-color: #00bfff; /* Blue border when selected */
     box-shadow: 0 2px 10px rgba(0, 191, 255, 0.4);
 }
 
-.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label:hover {
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p label:hover, /* Sidebar */
+.liquid-radio-container-main .st-emotion-cache-1v4673p label:hover { /* Main content */
     background-color: rgba(0, 191, 255, 0.1); /* Light blue hover effect */
 }
 
 /* Hide Streamlit's default radio circles */
-.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p input[type="radio"] {
+.st-emotion-cache-10qtn6p .st-emotion-cache-1v4673p input[type="radio"], /* Sidebar */
+.liquid-radio-container-main .st-emotion-cache-1v4673p input[type="radio"] { /* Main content */
     display: none;
 }
 
