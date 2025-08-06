@@ -63,7 +63,6 @@ if "faiss_index" not in st.session_state:
 
     @st.cache_resource
     def setup_backend():
-        st.write("Initializing backend components. This may take a moment...")
         embeddings_model = GuardianEmbeddings()
 
         serper_key = get_serper_api_key()
