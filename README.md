@@ -7,19 +7,34 @@ Guardian AI is an intelligent chatbot designed to empower users with quick, reli
 Whether you're looking for tips to protect yourself from scams, understanding complex security protocols, or simply need a quick answer to a general query, Guardian AI is here to help you navigate the digital landscape safely.
 
 Features
-Financial Security & Fraud Prevention: Access a comprehensive knowledge base on various types of fraud (phishing, identity theft, account takeover, BNPL fraud), security protocols, and steps to take if you become a victim.
 
-Retrieval-Augmented Generation (RAG): Efficiently retrieves relevant information from a local knowledge base (transactions_knowledge_base.txt) using advanced embedding models and FAISS vector search.
+1 Financial Security & Fraud Prevention: 
 
-Real-time Web Search: Integrates with the Serper API to perform live web searches for queries outside the local knowledge base, ensuring up-to-date and broad information.
+Access a comprehensive knowledge base on various types of fraud (phishing, identity theft, account takeover, BNPL fraud), security protocols, and steps to take if you become a victim.
 
-Custom Document Context (NEW!): Beyond its built-in knowledge base, Guardian AI now allows you to upload your own documents (in .txt, .pdf, or .docx formats). This enables the chatbot to provide answers and insights based on the specific content you provide, making it a versatile tool for various information retrieval needs.
+2 Retrieval-Augmented Generation (RAG): 
 
-Dual Response Modes: Choose between "Concise" (short, summarized replies) and "Detailed" (expanded, in-depth responses) to tailor the chatbot's output to your needs.
+Efficiently retrieves relevant information from a local knowledge base (transactions_knowledge_base.txt) using advanced embedding models and FAISS vector search.
 
-Sleek "Liquid Glass" UI: A modern and elegant user interface built with Streamlit and custom CSS, featuring blurred glass effects, vibrant blue accents, and a floating background animation.
+3 Real-time Web Search: 
 
-Multi-Page Navigation: A structured application with dedicated pages for:
+Integrates with the Serper API to perform live web searches for queries outside the local knowledge base, ensuring up-to-date and broad information.
+
+4 Custom Document Context (NEW!): 
+
+Beyond its built-in knowledge base, Guardian AI now allows you to upload your own documents (in .txt, .pdf, or .docx formats). This enables the chatbot to provide answers and insights based on the specific content you provide, making it a versatile tool for various information retrieval needs.
+
+5 Dual Response Modes: 
+
+Choose between "Concise" (short, summarized replies) and "Detailed" (expanded, in-depth responses) to tailor the chatbot's output to your needs.
+
+6 Sleek "Liquid Glass" UI: 
+
+A modern and elegant user interface built with Streamlit and custom CSS, featuring blurred glass effects, vibrant blue accents, and a floating background animation.
+
+7 Multi-Page Navigation: 
+
+A structured application with dedicated pages for:
 Home: Introduction to Guardian AI and quick access buttons.
 Chat: The main interactive chatbot interface.
 About Creator: Information about the developer, Rupsha Das, and the project's vision.
