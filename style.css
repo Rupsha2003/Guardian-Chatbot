@@ -222,21 +222,19 @@ body::after {
   transform: translateY(-3px); /* More pronounced lift */
 }
 
-/* Updated: Homepage Buttons Container for Centering */
+/* Updated: Homepage Buttons Container for Left/Right Positioning */
 .home-buttons-container {
-    text-align: center; /* Fallback for older browsers */
+    text-align: center; /* Fallback */
     margin-top: 3rem;
     display: flex;
-    justify-content: center; /* Center buttons horizontally */
-    align-items: center; /* Center buttons vertically if they have different heights */
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    justify-content: space-between; /* Pushes items to the ends */
+    align-items: center;
+    flex-wrap: wrap;
     gap: 20px; /* Space between buttons */
     max-width: 600px; /* Control the overall width of the button row */
     margin-left: auto; /* Center the container itself */
     margin-right: auto;
 }
-
-/* Removed .button-wrapper as it's no longer needed with direct flex centering */
 
 
 /* Chat input */
@@ -278,12 +276,6 @@ body::after {
 .glass-box p {
     color: #e0e0e0;
 }
-
-/* File Uploader Container (Main Area - now removed) */
-/* .file-uploader-container {
-    margin-bottom: 20px;
-    padding: 15px;
-} */
 
 /* New: File Uploader Container for Sidebar */
 .file-uploader-sidebar-container {
@@ -380,12 +372,26 @@ body::after {
 }
 
 /* Contact Me Section Styling */
-.contact-me-title {
-    color: #1e90ff; /* Dodger Blue */
+.contact-me-box { /* New class for the contact box */
+    background: rgba(255, 215, 0, 0.2); /* Light yellow with transparency */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.4); /* Yellow border */
+    padding: 1.5rem;
+    margin: 2em auto; /* Space above and below, centered */
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 6px 30px rgba(255, 215, 0, 0.15);
     text-align: center;
-    margin-top: 2em;
+    max-width: 500px; /* Adjust width for contact box */
+    color: #e0e0e0;
+}
+
+.contact-me-title {
+    color: #FFD700; /* Light Yellow for title */
+    text-align: center;
+    margin-top: 0; /* Remove default margin */
     margin-bottom: 0.5em;
-    text-shadow: 1px 1px 8px rgba(30, 144, 255, 0.5);
+    text-shadow: 1px 1px 8px rgba(255, 215, 0, 0.5);
 }
 
 .contact-me-email {
@@ -395,13 +401,13 @@ body::after {
 }
 
 .contact-me-email a {
-    color: #00bfff; /* Deep Sky Blue for link */
+    color: #FFD700; /* Light Yellow for link */
     text-decoration: none;
     font-weight: bold;
     transition: color 0.2s ease;
 }
 
 .contact-me-email a:hover {
-    color: #1e90ff; /* Dodger Blue on hover */
+    color: #FFC107; /* Slightly darker yellow on hover */
     text-decoration: underline;
 }
