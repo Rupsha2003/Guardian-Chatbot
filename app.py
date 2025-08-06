@@ -5,9 +5,12 @@ import os
 import io # For handling file-like objects
 
 # --- Import API Key Retrieval Functions ---
+# These functions are assumed to be correctly defined in config/api_keys.py
+# and fetch keys from Streamlit secrets.
 from config.api_keys import get_serper_api_key, get_gemini_api_key
 
 # --- Import Backend Logic ---
+# These modules are assumed to be correctly structured and accessible.
 from models.embeddings import GuardianEmbeddings
 from utils.rag_utils import load_and_chunk_document, create_vector_store, retrieve_relevant_info
 from utils.web_search import perform_web_search
@@ -47,7 +50,7 @@ load_css("style.css") # Load the custom CSS
 
 
 # --- Initialize Session State and Backend Components ---
-# This ensures heavy components are loaded only once
+# This ensures heavy components are loaded only once and cached.
 if "faiss_index" not in st.session_state:
     st.session_state.faiss_index = None
     st.session_state.document_chunks = None
@@ -56,6 +59,7 @@ if "faiss_index" not in st.session_state:
     st.session_state.serper_api_key = None # Store serper key in session state
     st.session_state.uploaded_faiss_index = None # New: For uploaded file's vector store
     st.session_state.uploaded_document_chunks = None # New: For uploaded file's chunks
+    st.session_state.uploaded_file_name = None # To track the name of the uploaded file
 
     @st.cache_resource
     def setup_backend():
@@ -65,7 +69,7 @@ if "faiss_index" not in st.session_state:
         serper_key = get_serper_api_key()
         gemini_key = get_gemini_api_key()
 
-        llm_model = initialize_llm()
+        llm_model = initialize_llm() # initialize_llm now fetches key internally
         if not llm_model:
             st.error("Failed to initialize the LLM model. Please check your API key and try again.")
             st.stop()
@@ -75,7 +79,7 @@ if "faiss_index" not in st.session_state:
             st.error(f"Error: The knowledge base file '{knowledge_base_path}' was not found.")
             st.stop()
 
-        document_chunks = load_and_chunk_document(knowledge_base_path)
+        document_chunks = load_and_chunk_document(file_path=knowledge_base_path) # Pass file_path explicitly
         faiss_index, _ = create_vector_store(document_chunks, embeddings_model)
 
         return embeddings_model, llm_model, faiss_index, document_chunks, serper_key
@@ -92,16 +96,16 @@ if "current_page" not in st.session_state:
 
 
 # --- File Processing Function ---
-def process_uploaded_file(uploaded_file, embeddings_model):
+def process_uploaded_file(uploaded_file_obj, embeddings_model):
     """Processes an uploaded file, extracts text, and creates a new vector store."""
     file_content = ""
-    file_type = uploaded_file.type
+    file_type = uploaded_file_obj.type
 
     if "text" in file_type:
-        file_content = uploaded_file.read().decode("utf-8")
+        file_content = uploaded_file_obj.read().decode("utf-8")
     elif "pdf" in file_type and PdfReader:
         try:
-            reader = PdfReader(io.BytesIO(uploaded_file.read()))
+            reader = PdfReader(io.BytesIO(uploaded_file_obj.read()))
             for page in reader.pages:
                 file_content += page.extract_text() + "\n"
         except Exception as e:
@@ -109,7 +113,7 @@ def process_uploaded_file(uploaded_file, embeddings_model):
             return None, None
     elif "document" in file_type or "wordprocessingml" in file_type and Document: # For .docx
         try:
-            doc = Document(io.BytesIO(uploaded_file.read()))
+            doc = Document(io.BytesIO(uploaded_file_obj.read()))
             for para in doc.paragraphs:
                 file_content += para.text + "\n"
         except Exception as e:
@@ -121,16 +125,11 @@ def process_uploaded_file(uploaded_file, embeddings_model):
 
     if file_content:
         with st.spinner("Processing uploaded document..."):
-            # Load and chunk document from string content
-            # Assuming load_and_chunk_document can handle string input or needs adaptation
-            # For now, let's adapt load_and_chunk_document in utils/rag_utils.py
-            # Or create a new function in rag_utils for string input.
-            # For simplicity, we'll pass a dummy file_path that load_and_chunk_document can use to signify string processing.
-            uploaded_chunks = load_and_chunk_document(file_content=file_content)
+            uploaded_chunks = load_and_chunk_document(file_content=file_content) # Pass content directly
             
             if uploaded_chunks:
                 uploaded_faiss_index, _ = create_vector_store(uploaded_chunks, embeddings_model)
-                st.success(f"Successfully processed '{uploaded_file.name}' with {len(uploaded_chunks)} chunks.")
+                st.success(f"Successfully processed '{uploaded_file_obj.name}' with {len(uploaded_chunks)} chunks.")
                 return uploaded_faiss_index, uploaded_chunks
             else:
                 st.error("Failed to chunk content from uploaded file.")
@@ -154,16 +153,14 @@ def home_page():
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='home-buttons-container centered-buttons'>", unsafe_allow_html=True) # Added centered-buttons class
     
-    # Use columns for side-by-side buttons
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
-            navigate_to("chat")
-    with col2:
-        if st.button("About the Creator", key="about_creator_button"):
-            navigate_to("about_creator")
+    # Buttons are now directly inside the container, which will be flex-centered
+    if st.button("Start Chatting with Guardian AI", key="start_chat_button"):
+        navigate_to("chat")
+    
+    if st.button("About the Creator", key="about_creator_button"):
+        navigate_to("about_creator")
         
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -171,51 +168,89 @@ def home_page():
 # --- Chat Page Function ---
 def chat_page():
     st.markdown("<h1 class='liquid-title'>Guardian AI Chat</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
+    # Changed class to 'yellow-glass-box' for the description
+    st.markdown("<p class='yellow-glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
 
-    # --- File Uploader Section ---
-    st.markdown("<div class='file-uploader-container glass-box'>", unsafe_allow_html=True)
-    uploaded_file = st.file_uploader(
-        "Upload a document for context (TXT, PDF, DOCX)",
-        type=["txt", "pdf", "docx"],
-        key="file_uploader"
-    )
+    # --- File Uploader Section (MOVED TO SIDEBAR) ---
+    with st.sidebar:
+        st.markdown("---") # Separator
+        st.markdown("<h2 class='liquid-subtitle'>Document Context</h2>", unsafe_allow_html=True)
+        st.markdown("<div class='file-uploader-sidebar-container glass-box'>", unsafe_allow_html=True) # New class for sidebar uploader
+        uploaded_file = st.file_uploader(
+            "Upload a document for context (TXT, PDF, DOCX)",
+            type=["txt", "pdf", "docx"],
+            key="file_uploader_sidebar" # Changed key for sidebar uploader
+        )
 
-    if uploaded_file is not None:
-        if st.session_state.uploaded_faiss_index is None or st.session_state.uploaded_file_name != uploaded_file.name:
-            st.session_state.uploaded_file_name = uploaded_file.name # Store file name to detect changes
-            uploaded_index, uploaded_chunks = process_uploaded_file(uploaded_file, st.session_state.embeddings_model)
-            if uploaded_index and uploaded_chunks:
-                st.session_state.uploaded_faiss_index = uploaded_index
-                st.session_state.uploaded_document_chunks = uploaded_chunks
-            else:
-                st.session_state.uploaded_faiss_index = None
-                st.session_state.uploaded_document_chunks = None
-        st.info(f"Using context from: {uploaded_file.name}")
-    elif st.session_state.uploaded_faiss_index:
-        st.info(f"Currently using context from previously uploaded: {st.session_state.uploaded_file_name}")
-    else:
-        st.info("Using context from default knowledge base.")
+        if uploaded_file is not None:
+            # Check if a new file is uploaded or if the existing one is different
+            if st.session_state.get('uploaded_file_hash') != hash(uploaded_file.read()):
+                uploaded_file.seek(0) # Reset file pointer after reading hash
+                st.session_state.uploaded_file_hash = hash(uploaded_file.read())
+                uploaded_file.seek(0) # Reset file pointer again for actual processing
 
-    if st.session_state.uploaded_faiss_index and st.button("Clear Uploaded Data", key="clear_uploaded_data"):
-        st.session_state.uploaded_faiss_index = None
-        st.session_state.uploaded_document_chunks = None
-        st.session_state.uploaded_file_name = None
-        st.success("Uploaded data cleared. Reverting to default knowledge base.")
-        st.rerun()
-    
-    st.markdown("</div>", unsafe_allow_html=True) # End file-uploader-container
+                uploaded_index, uploaded_chunks = process_uploaded_file(uploaded_file, st.session_state.embeddings_model)
+                if uploaded_index and uploaded_chunks:
+                    st.session_state.uploaded_faiss_index = uploaded_index
+                    st.session_state.uploaded_document_chunks = uploaded_chunks
+                    st.session_state.uploaded_file_name = uploaded_file.name
+                else:
+                    st.session_state.uploaded_faiss_index = None
+                    st.session_state.uploaded_document_chunks = None
+                    st.session_state.uploaded_file_name = None
+                st.rerun() # Rerun to update state immediately
+            
+            if st.session_state.uploaded_faiss_index:
+                st.info(f"Using context from: {st.session_state.uploaded_file_name}")
+        elif st.session_state.uploaded_faiss_index:
+            st.info(f"Currently using context from previously uploaded: {st.session_state.uploaded_file_name}")
+        else:
+            st.info("Using context from default knowledge base.")
+
+        if st.session_state.uploaded_faiss_index and st.button("Clear Uploaded Data", key="clear_uploaded_data_sidebar"): # Changed key
+            st.session_state.uploaded_faiss_index = None
+            st.session_state.uploaded_document_chunks = None
+            st.session_state.uploaded_file_name = None
+            st.session_state.uploaded_file_hash = None # Clear hash too
+            st.success("Uploaded data cleared. Reverting to default knowledge base.")
+            st.rerun()
+        
+        st.markdown("</div>", unsafe_allow_html=True) # End file-uploader-sidebar-container
+        st.markdown("---") # Separator for navigation
+
+        st.markdown("<h2 class='liquid-subtitle'>Chat Settings</h2>", unsafe_allow_html=True)
+        # This radio button remains in the main area near the chat input
+        # st.markdown("<div class='liquid-radio-container'>", unsafe_allow_html=True)
+        # response_mode = st.radio(
+        #     "Response Mode:",
+        #     ("Concise", "Detailed"),
+        #     index=0,
+        #     horizontal=True,
+        #     key="response_mode_radio_sidebar", # Original sidebar radio
+        #     help="Choose between short, summarized replies or expanded, in-depth responses."
+        # )
+        # st.markdown("</div>", unsafe_allow_html=True)
+        
+        if st.button("Clear Chat History"):
+            st.session_state.messages = []
+            st.rerun() # Rerun to clear messages and refresh
+        
+        st.markdown("---") # Separator
+        st.markdown("<h2 class='liquid-subtitle'>Navigation</h2>", unsafe_allow_html=True)
+        if st.button("Back to Home", key="back_to_home_from_chat"):
+            navigate_to("home")
+        if st.button("Go to About Creator", key="about_from_chat"):
+            navigate_to("about_creator")
 
 
-    # --- Response Mode Buttons (Near Chat Input) ---
-    # Use a container for the radio buttons to apply floating glass style
+    # --- Response Mode Buttons (Near Chat Input - REMAINS IN MAIN AREA) ---
     st.markdown("<div class='liquid-radio-container-main'>", unsafe_allow_html=True)
     response_mode = st.radio(
         "Response Mode:",
         ("Concise", "Detailed"),
         index=0,
         horizontal=True, # Make it horizontal for a slide-like appearance
-        key="response_mode_radio", # Unique key for this radio button
+        key="response_mode_radio_main", # Unique key for this radio button in main area
         help="Choose between short, summarized replies or expanded, in-depth responses."
     )
     st.markdown("</div>", unsafe_allow_html=True)
@@ -272,21 +307,13 @@ def chat_page():
 
         st.session_state.messages.append({"role": "assistant", "content": final_answer})
 
-    # Sidebar Navigation (Moved to bottom of chat_page for clarity)
-    with st.sidebar:
-        st.markdown("---") # Separator
-        st.markdown("<h2 class='liquid-subtitle'>Navigation</h2>", unsafe_allow_html=True)
-        if st.button("Back to Home", key="back_to_home_from_chat"):
-            navigate_to("home")
-        if st.button("Go to About Creator", key="about_from_chat"):
-            navigate_to("about_creator")
-
 
 # --- About Creator Page Function ---
 def about_creator_page():
     st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
     
     # Use the raw GitHub content URL for the image
+    # IMPORTANT: Ensure NEWPHOTO.jpg is in the root of your GitHub repo
     image_path = "https://raw.githubusercontent.com/Rupsha2003/Guardian-Chatbot/main/NEWPHOTO.jpg"
     
     st.markdown(f"""
@@ -297,6 +324,9 @@ def about_creator_page():
             <p>Hello! I'm Rupsha Das, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
             <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>
             <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
+            
+            <h3 class='contact-me-title'>Contact Me</h3>
+            <p class='contact-me-email'>Email: <a href='mailto:rups.das.2003@gmail.com'>rups.das.2003@gmail.com</a></p>
         </div>
     """, unsafe_allow_html=True)
 

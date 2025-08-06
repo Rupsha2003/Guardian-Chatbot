@@ -74,9 +74,10 @@ body::after {
 
 /* Specific style for home page title */
 .home-title {
-    font-size: 4.5rem; /* Larger for homepage */
+    font-size: 5.5rem; /* Even Larger for homepage */
     margin-top: 2rem;
     margin-bottom: 0.2em;
+    text-shadow: 0 0 20px rgba(0, 191, 255, 0.9), 0 0 30px rgba(0, 191, 255, 0.7); /* More prominent highlight */
 }
 
 
@@ -102,6 +103,22 @@ body::after {
   max-width: 900px; /* Increased max-width */
   color: #e0e0e0;
 }
+
+/* New: Yellow Glass Box */
+.yellow-glass-box {
+  background: rgba(255, 215, 0, 0.2); /* Light yellow with transparency */
+  border-radius: 15px;
+  border: 1px solid rgba(255, 215, 0, 0.4); /* Yellow border */
+  padding: 1.5rem;
+  margin: 1rem auto;
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 6px 30px rgba(255, 215, 0, 0.15); /* Subtle yellow shadow */
+  text-align: center;
+  max-width: 900px;
+  color: #e0e0e0;
+}
+
 
 .description-box {
     font-size: 1.15em; /* Slightly larger font */
@@ -185,13 +202,13 @@ body::after {
 /* Custom buttons */
 .st-emotion-cache-1n6441g button, .st-emotion-cache-1n6441g a,
 .home-buttons-container button { /* Apply to all custom buttons */
-  background-color: #00bfff; /* Deep Sky Blue */
-  color: #000a12; /* Very dark blue text */
+  background-color: #FFD700; /* Light Yellow / Gold */
+  color: #333333; /* Darker text for contrast */
   border-radius: 10px; /* More rounded buttons */
   border: none;
   font-weight: bold;
   padding: 12px 25px; /* Larger padding */
-  box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4); /* Blue shadow */
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); /* Yellow shadow */
   transition: all 0.3s ease; /* Smooth transition for hover */
   cursor: pointer;
   margin: 10px; /* Space between buttons */
@@ -200,22 +217,26 @@ body::after {
 
 .st-emotion-cache-1n6441g button:hover, .st-emotion-cache-1n6441g a:hover,
 .home-buttons-container button:hover {
-  background-color: #1e90ff; /* Dodger Blue on hover */
-  box-shadow: 0 6px 20px rgba(0, 191, 255, 0.6);
+  background-color: #FFC107; /* Slightly darker yellow on hover */
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
   transform: translateY(-3px); /* More pronounced lift */
 }
 
+/* Updated: Homepage Buttons Container for Centering */
 .home-buttons-container {
-    text-align: center;
+    text-align: center; /* Fallback for older browsers */
     margin-top: 3rem;
-    display: flex; /* Use flexbox for button layout */
-    justify-content: space-between; /* Push buttons to ends */
-    max-width: 600px; /* Limit width to control spacing */
+    display: flex;
+    justify-content: center; /* Center buttons horizontally */
+    align-items: center; /* Center buttons vertically if they have different heights */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 20px; /* Space between buttons */
+    max-width: 600px; /* Control the overall width of the button row */
     margin-left: auto; /* Center the container itself */
     margin-right: auto;
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-    gap: 20px; /* Gap between buttons */
 }
+
+/* Removed .button-wrapper as it's no longer needed with direct flex centering */
 
 
 /* Chat input */
@@ -258,11 +279,25 @@ body::after {
     color: #e0e0e0;
 }
 
+/* File Uploader Container (Main Area - now removed) */
+/* .file-uploader-container {
+    margin-bottom: 20px;
+    padding: 15px;
+} */
+
+/* New: File Uploader Container for Sidebar */
+.file-uploader-sidebar-container {
+    padding: 15px; /* Padding inside the glass box */
+    margin-top: 10px; /* Space from previous elements in sidebar */
+    margin-bottom: 20px; /* Space before next elements in sidebar */
+    /* Inherits glass-box styles for background, border, blur, shadow */
+}
+
+
 /* Circular Image for About Creator Page */
 .circular-image-container {
     text-align: center;
-    /* Adjusted margin-bottom to create space between image and text */
-    margin-bottom: 30px; /* Increased space */
+    margin-bottom: 30px; /* Increased space below image */
 }
 
 .circular-image {
@@ -280,7 +315,7 @@ body::after {
 }
 
 /* Floating Slide for Radio Buttons (Concise/Detailed) */
-.liquid-radio-container { /* Sidebar radio button container */
+.liquid-radio-container { /* Sidebar radio button container (original, for reference) */
     background: rgba(10, 25, 47, 0.6);
     border-radius: 10px;
     border: 1px solid rgba(0, 191, 255, 0.2);
@@ -344,3 +379,29 @@ body::after {
     display: none;
 }
 
+/* Contact Me Section Styling */
+.contact-me-title {
+    color: #1e90ff; /* Dodger Blue */
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    text-shadow: 1px 1px 8px rgba(30, 144, 255, 0.5);
+}
+
+.contact-me-email {
+    font-size: 1.1em;
+    text-align: center;
+    color: #e0e0e0;
+}
+
+.contact-me-email a {
+    color: #00bfff; /* Deep Sky Blue for link */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.contact-me-email a:hover {
+    color: #1e90ff; /* Dodger Blue on hover */
+    text-decoration: underline;
+}
