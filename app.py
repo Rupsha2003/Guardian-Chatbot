@@ -172,7 +172,7 @@ def home_page():
 def chat_page():
     st.markdown("<h1 class='liquid-title'>Guardian AI Chat</h1>", unsafe_allow_html=True)
     # Changed class to 'yellow-glass-box' for the description
-    st.markdown("<p class='yellow-glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
+    st.markdown("<p class='yellow-glass-box description-box'>Ask me about financial security, fraud prevention or anything that's on your mind. I'm here to help!</p>", unsafe_allow_html=True)
 
     # --- File Uploader Section (MOVED TO SIDEBAR) ---
     with st.sidebar:
@@ -265,7 +265,7 @@ def chat_page():
             st.markdown(message["content"])
 
     # Handle User Input
-    if prompt := st.chat_input("Ask a question about fraud, security, or anything else..."):
+    if prompt := st.chat_input("Ask a question about fraud, security, or anything that's on your mind.."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         
         with st.chat_message("user"):
@@ -327,10 +327,7 @@ def about_creator_page():
             <p>Hello! I'm Rupsha Das, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
             <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>
             <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
-            
-            <div class='contact-me-box yellow-glass-box'>
-                <h3 class='contact-me-title'>Contact Me</h3>
-                <p class='contact-me-email'>Email: <a href='mailto:rups.das.2003@gmail.com'>rups.das.2003@gmail.com</a></p>
+            <p> Contact me - rups.das.2003@gmail.com </p>
             </div>
         </div>
     """, unsafe_allow_html=True)
