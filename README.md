@@ -27,13 +27,19 @@ About Creator: Information about the developer, Rupsha Das, and the project's vi
 Screenshots
 
 Homepage:
-<img width="1911" height="788" alt="image" src="https://github.com/user-attachments/assets/f99c2194-f120-4eec-a57e-50e41e1c407a" />
+<img width="1912" height="908" alt="image" src="https://github.com/user-attachments/assets/a41b71a8-64ec-4d16-b021-b35d99de34ed" />
+
 
 Chat Interface:
-<img width="1908" height="994" alt="image" src="https://github.com/user-attachments/assets/9587a654-688c-49fd-969d-c52b70b4f1d3" />
+<img width="1918" height="875" alt="image" src="https://github.com/user-attachments/assets/09af8eef-88a3-4289-a8b3-08c87a777c74" />
+
+<img width="1918" height="780" alt="image" src="https://github.com/user-attachments/assets/f623702a-f875-495f-ab1f-5d72e169bc64" />
+
+
 
 About Creator Page:
-<img width="1917" height="863" alt="image" src="https://github.com/user-attachments/assets/20653ed0-3e52-481d-8301-74963f088ea7" />
+<img width="1916" height="812" alt="image" src="https://github.com/user-attachments/assets/f52d8d49-80ee-4541-b1c5-80d21631c27b" />
+
 
 
 📁 Project Structure
@@ -159,9 +165,13 @@ GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
 
 Click "Deploy!" and monitor the logs.
 
-Contact
+Contact -
+
 For any questions or feedback, feel free to contact the creator:
 
 Rupsha Das
+
 Email: rups.das.2003@gmail.comAuthor
+
+
 Building intelligent solutions to empower and protect.
