@@ -20,7 +20,7 @@ Efficiently retrieves relevant information from a local knowledge base (transact
 
 Integrates with the Serper API to perform live web searches for queries outside the local knowledge base, ensuring up-to-date and broad information.
 
-4 Custom Document Context (NEW!): 
+4 Custom Document Context : 
 
 Beyond its built-in knowledge base, Guardian AI now allows you to upload your own documents (in .txt, .pdf, or .docx formats). This enables the chatbot to provide answers and insights based on the specific content you provide, making it a versatile tool for various information retrieval needs.
 
