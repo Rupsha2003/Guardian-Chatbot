@@ -155,7 +155,7 @@ def home_page():
     """, unsafe_allow_html=True)
 
     # Reverted to two columns for left/right button placement
-    st.markdown("<div class='home-buttons-container'>", unsafe_allow_html=True)
+    st.markdown("<center><div class='home-buttons-container'></center>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:
@@ -172,7 +172,7 @@ def home_page():
 def chat_page():
     st.markdown("<h1 class='liquid-title'>Guardian AI Chat</h1>", unsafe_allow_html=True)
     # Changed class to 'yellow-glass-box' for the description
-    st.markdown("<p class='yellow-glass-box description-box'>Ask me anything about financial security, fraud prevention, or general knowledge. I'm here to help!</p>", unsafe_allow_html=True)
+    st.markdown("<p class='yellow-glass-box description-box'>Ask me about financial security, fraud prevention, or anything that's on your mind. I'm here to help!</p>", unsafe_allow_html=True)
 
     # --- File Uploader Section (MOVED TO SIDEBAR) ---
     with st.sidebar:
@@ -274,4 +274,81 @@ def chat_page():
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 # Determine which vector store to use
-                current_faiss_index = st.session_state.uploaded_faiss_index if st.session_state.uploaded_faiss_index else st.session_state.faiss_in
+                current_faiss_index = st.session_state.uploaded_faiss_index if st.session_state.uploaded_faiss_index else st.session_state.faiss_index
+                current_document_chunks = st.session_state.uploaded_document_chunks if st.session_state.uploaded_document_chunks else st.session_state.document_chunks
+
+                is_search_query = any(keyword in prompt.lower() for keyword in ["search", "find", "who is", "what is", "tell me about"])
+                
+                final_answer = ""
+                
+                # Prioritize web search for general knowledge questions not covered by local KB
+                if is_search_query and not any(kw in prompt.lower() for kw in ["fraud", "security", "transaction", "phishing", "identity theft", "account takeover", "bnpl"]):
+                    st.info("Performing a live web search as requested.")
+                    web_results = perform_web_search(prompt)
+                    if web_results:
+                        final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
+                    else:
+                        final_answer = "Sorry, I couldn't find any relevant web search results for your query."
+                else:
+                    st.info("Searching relevant context...")
+                    # Use the dynamically selected index and chunks
+                    retrieved_context = retrieve_relevant_info(prompt, current_faiss_index, current_document_chunks, st.session_state.embeddings_model)
+                    
+                    if retrieved_context and len(retrieved_context.strip()) > 50:
+                        st.info("Generating a response from the provided context.")
+                        final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, retrieved_context, response_mode)
+                    else:
+                        st.warning("No relevant information found in the provided context.")
+                        st.info("Performing a web search as a fallback...")
+                        web_results = perform_web_search(prompt)
+                        if web_results:
+                            final_answer = generate_answer_from_context(st.session_state.llm_model, prompt, web_results, response_mode)
+                        else:
+                            final_answer = "Sorry, I couldn't find an answer in either the provided context or a web search."
+                
+                st.markdown(final_answer)
+
+        st.session_state.messages.append({"role": "assistant", "content": final_answer})
+
+
+# --- About Creator Page Function ---
+def about_creator_page():
+    st.markdown("<h1 class='liquid-title'>About the Creator</h1>", unsafe_allow_html=True)
+    
+    # Use the raw GitHub content URL for the image
+    # IMPORTANT: Ensure NEWPHOTO.jpg is in the root of your GitHub repo
+    image_path = "https://raw.githubusercontent.com/Rupsha2003/Guardian-Chatbot/main/NEWPHOTO.jpg"
+    
+    st.markdown(f"""
+        <div class='glass-box about-creator-content'>
+            <div class='circular-image-container'>
+                <img src='{image_path}' class='circular-image' alt='Rupsha Das'>
+            </div>
+            <p>Hello! I'm Rupsha Das, the creator of Guardian AI. My goal was to build an intelligent and accessible tool that empowers individuals with knowledge to protect themselves against financial fraud and enhance their digital security. This project combines advanced AI techniques like Retrieval-Augmented Generation (RAG) with a user-friendly interface to make complex information easy to understand and act upon.</p>
+            <p>This chatbot is designed to provide you with quick, reliable information on various types of fraud, security protocols, and steps to take if you become a victim. It leverages a comprehensive internal knowledge base and can perform real-time web searches for the latest information.</p>
+            <p>I believe that awareness is the first step towards prevention, and I hope Guardian AI serves as a valuable resource in your journey towards better financial safety.</p>
+            
+            <div class='contact-me-box yellow-glass-box'> {/* New div for contact box */}
+                <h3 class='contact-me-title'>Contact Me</h3>
+                <p class='contact-me-email'>Email: <a href='mailto:rups.das.2003@gmail.com'>rups.das.2003@gmail.com</a></p>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Sidebar for Navigation
+    with st.sidebar:
+        st.markdown("<h2 class='liquid-subtitle'>Navigation</h2>", unsafe_allow_html=True)
+        if st.button("Back to Home", key="back_to_home_from_about"):
+            navigate_to("home")
+        if st.button("Go to Chat", key="chat_from_about"):
+            navigate_to("chat")
+
+
+# --- Main App Logic (Page Routing) ---
+if st.session_state.current_page == "home":
+    home_page()
+elif st.session_state.current_page == "chat":
+    chat_page()
+elif st.session_state.current_page == "about_creator":
+    about_creator_page()
+
